@@ -39,11 +39,11 @@ Route::get('/verify-email', function () {
     })->name('verification.verify');
 
 Route::get('/attendance', function () {
-    return view('attendance');
+    return view('user.attendance');
 })->name('attendance');
 
 Route::get('/attendance/list', function () {
-    return view('attendance_list');
+    return view('user.attendance_list');
 })->name('attendance.list');
 
 Route::get('/attendance/detail/{id}', function ($id) {
