@@ -14,5 +14,121 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts/app');
 });
+
+Route::get('/admin', function () {
+    return view('layouts/app_admin');
+});
+
+Route::get('/staff', function () {
+    return view('layouts/app_staff');
+});
+
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
+
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::get('/attendance', function () {
+    return view('attendance');
+})->name('attendance');
+
+Route::get('/attendance/list', function () {
+    return view('attendance_list');
+})->name('attendance.list');
+
+Route::get('/attendance/detail/{id}', function ($id) {
+    return view('attendance_detail', [
+        'name' => '西 伶奈',
+        'date' => '2023年6月1日',
+        'start_time' => '09:00',
+        'end_time' => '18:00',
+        'break1' => '12:00',
+        'break2' => null,
+        'note' => '電車遅延のため',
+    ]);
+})->name('attendance.detail');
+
+// 一般ユーザー用
+Route::get('/stamp_correction_request/user', function () {
+    return view('stamp_correction_request_list_user');
+})->name('stamp_correction_request.user');
+
+// 管理者用
+Route::get('/stamp_correction_request/admin', function () {
+    return view('stamp_correction_request_list_admin');
+})->name('stamp_correction_request.admin');
+
+Route::get('/admin/login', function () {
+    return view('admin_login');
+})->name('admin.login');
+
+Route::get('/admin/attendance/list', function () {
+    return view('admin_attendance_list');
+})->name('admin.attendance.list');
+
+Route::get('/admin/attendance/{id}', function ($id) {
+    return view('admin_attendance_detail', [
+        'name' => '西 伶奈',
+        'date' => '2023年6月1日',
+        'start_time' => '09:00',
+        'end_time' => '18:00',
+        'break1' => '12:00',
+        'break2' => null,
+        'note' => '電車遅延のため',
+    ]);
+})->name('admin.attendance.detail');
+
+Route::get('/admin/staff/list', function () {
+    return view('admin_staff_list');
+})->name('admin.staff.list');
+
+Route::get('/admin/attendance/staff/{id}', function ($id) {
+    $records = [
+        [
+            'date' => '2023-06-01',
+            'start_time' => '09:00',
+            'end_time' => '18:00',
+            'break_time' => '1:00',
+            'total_time' => '8:00',
+        ],
+        [
+            'date' => '2023-06-02',
+            'start_time' => '09:00',
+            'end_time' => '18:00',
+            'break_time' => '1:00',
+            'total_time' => '8:00',
+        ],
+        [
+            'date' => '2023-06-03',
+            'start_time' => null,
+            'end_time' => null,
+            'break_time' => null,
+            'total_time' => null,
+        ],
+        // ...必要な日数分追加
+    ];
+
+    return view('admin_attendance_staff', [
+        'staff_name' => '西 伶奈',
+        'records' => $records,
+    ]);
+})->name('admin.attendance.staff');
+
+Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', function ($id) {
+    return view('stamp_correction_request_approve', [
+        'id' => $id,
+        'name' => '西 伶奈',
+        'date' => '2023年6月1日',
+        'start_time' => '09:00',
+        'end_time' => '18:00',
+        'break1' => '12:00',
+        'break2' => null,
+        'note' => '電車遅延のため ',
+    ]);
+    })->name('stamp.correction.request.approve');
