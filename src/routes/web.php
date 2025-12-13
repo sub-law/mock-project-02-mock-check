@@ -21,18 +21,22 @@ Route::get('/admin', function () {
     return view('layouts/app_admin');
 });
 
-Route::get('/staff', function () {
-    return view('layouts/app_staff');
+Route::get('/user', function () {
+    return view('layouts/app_user');
 });
 
 Route::get('/register', function () {
-    return view('register');
+    return view('user.register');
 })->name('register');
 
 
 Route::get('/login', function () {
-    return view('login');
+    return view('user.user_login');
 })->name('login');
+
+Route::get('/verify-email', function () {
+    return view('user.verify');
+    })->name('verification.verify');
 
 Route::get('/attendance', function () {
     return view('attendance');
@@ -65,7 +69,7 @@ Route::get('/stamp_correction_request/admin', function () {
 })->name('stamp_correction_request.admin');
 
 Route::get('/admin/login', function () {
-    return view('admin_login');
+    return view('admin.admin_login');
 })->name('admin.login');
 
 Route::get('/admin/attendance/list', function () {

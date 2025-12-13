@@ -54,10 +54,11 @@ MailHog
 ###　仮画面確認用　URL
 ヘッダー部分	http://localhost
 ヘッダー部分	http://localhost/admin
-ヘッダー部分	http://localhost/staff
+ヘッダー部分	http://localhost/user
 
 会員登録画面（一般ユーザー）	http://localhost/register
 ログイン画面（一般ユーザー）	http://localhost/login
+メール認証誘導画面（一般ユーザー）http://localhost/verify-email
 勤怠登録画面（一般ユーザー）	http://localhost/attendance
 勤怠一覧画面（一般ユーザー）	http://localhost/attendance/list
 勤怠詳細画面（一般ユーザー）	http://localhost/attendance/detail/{id}
