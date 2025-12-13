@@ -1,23 +1,25 @@
-# laravel-setup-base
-プロジェクト直下に.envを作成（既にファイルがあり以下の記述があれば不要）
+# 模擬案件2
+coachtech 勤怠管理アプリ
+
+## 環境構築手順
+クローンの作成
+git clone <リンク名>
+
+プロジェクト直下に.envを作成
 touch .env
 
 .envに以下を記述（UID/GIDはホストOSのユーザーIDに合わせて設定）
 UID=1000
 GID=1000
 
-Docker ビルド 
-docker-compose up -d --build
+## Laravel初期設定
+make build
+make init
 
-PHPコンテナに入る 
-docker-compose exec php bash
-
-Composer インストール 
-composer install
-
-.env 作成 
-cp .env.example .env
-
-アプリキー生成 php artisan key:generate
+## 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
+php artisan view:clear
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
 
 PHPコンテナから出る　Ctrl+D
