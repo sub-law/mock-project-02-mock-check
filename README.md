@@ -34,10 +34,10 @@ PHPコンテナから出る　Ctrl+D
 その際はメール一覧画面に戻り、再度メール本文内の「メールアドレスを確認する」または「Verify Email Address」をクリックしてください。
 
 ## 動作確認URL一覧
-ログイン画面表示:http://localhost/login
-商品一覧画面：http://localhost
-MySQL画面：http://localhost:8080
-mailhog認証画面：http://localhost:8025/
+会員登録画面（一般ユーザー）：	http://localhost/register
+ログイン画面（管理者）：	http://localhost/admin/login
+MySQL画面：	http://localhost:8080
+mailhog認証画面：	http://localhost:8025/
 
 仕様環境
 PHP: 8.1.33 (CLI/FPM)
@@ -60,9 +60,9 @@ MailHog
 # ログイン画面（一般ユーザー）	http://localhost/login
 # メール認証誘導画面（一般ユーザー）http://localhost/verify-email
 # 勤怠登録画面（一般ユーザー）	http://localhost/attendance
-勤怠一覧画面（一般ユーザー）	http://localhost/attendance/list
+# 勤怠一覧画面（一般ユーザー）	http://localhost/attendance/list
 勤怠詳細画面（一般ユーザー）	http://localhost/attendance/detail/{id}
-申請一覧画面（一般ユーザー）	http://localhost/stamp_correction_request/list
+申請一覧画面（一般ユーザー）	http://localhost/stamp_correction_request
 # ログイン画面（管理者）	http://localhost/admin/login
 勤怠一覧画面（管理者）	http://localhost/admin/attendance/list
 勤怠詳細画面（管理者）	http://localhost/admin/attendance/{id}

@@ -94,6 +94,11 @@ body {
     opacity: 1;
 }
 
+.attendance-table .status-col,
+.attendance-table td:first-child {
+    text-align: left;
+}
+
 .attendance-table th,
 .attendance-table td {
     color: #737373;

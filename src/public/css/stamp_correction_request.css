@@ -1,0 +1,121 @@
+body {
+    background: #F0EFF2;
+}
+
+.request-list-wrapper {
+    max-width: 900px;
+    margin: 100px auto;
+    text-align: center;
+}
+
+.request-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+.request-line {
+    width: 0;
+    height: 40px;
+    border-left: 8px solid #000000;
+    margin-right: 16px;
+}
+
+.request-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 100%;
+    text-align: left;
+}
+
+.request-tabs {
+    width: 900px;
+    display: flex;
+    justify-content: flex-start;
+    margin: 40px auto;
+    border-bottom: 1px solid #000000;
+    position: relative;
+    min-width: 120px;
+    height: 19px;
+    white-space: nowrap;
+    padding-bottom: 50px;
+}
+
+.request-tab {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0.15em;
+    width: 72px;
+    height: 19px;
+    opacity: 1;
+    color: #737373;
+    margin: 0 60px;
+    padding-bottom: 10px;
+    margin-right: 60px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.request-tab.active {
+    color: #000000;
+}
+
+.request-tab:hover {
+    color: #4CAF50;
+}
+
+.request-table {
+    width: 900px;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.request-table .status-col,
+.request-table td:first-child {
+    text-align: center;
+}
+
+.request-table th,
+.request-table td {
+    color: #737373;
+    font-weight: 700;
+    font-size: 16px;
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #E1E1E1;
+    padding: 12px;
+    text-align: left;
+}
+
+.request-table thead tr {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.request-table th {
+    background-color: #ffffff;
+    font-weight: 700;
+}
+
+.request-table td.request-detail-cell {
+    color: #000000;
+    /* 黒文字 */
+}
+
+.request-detail-cell a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.request-detail-cell a:hover {
+    color: #4CAF50;
+    text-decoration: underline;
+}

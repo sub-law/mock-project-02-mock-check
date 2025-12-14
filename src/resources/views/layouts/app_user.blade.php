@@ -16,10 +16,7 @@
         <nav class="admin-nav">
             <ul>
                 <li><a href="{{ route('attendance') }}">勤怠</a></li>
-        
-                {{-- <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li> --}}
-                <li><a href="{{ url('/attendance/list') }}">勤怠一覧</a></li>
-
+                <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li> 
                 {{-- <li><a href="{{ route('stamp_correction_request.user') }}">申請</a></li> --}}
                 <li><a href="{{ url('/stamp_correction_request/user') }}">申請</a></li>
 

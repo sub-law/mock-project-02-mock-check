@@ -47,7 +47,7 @@ Route::get('/attendance/list', function () {
 })->name('attendance.list');
 
 Route::get('/attendance/detail/{id}', function ($id) {
-    return view('attendance_detail', [
+    return view('user.attendance_detail', [
         'name' => '西 伶奈',
         'date' => '2023年6月1日',
         'start_time' => '09:00',
@@ -58,15 +58,10 @@ Route::get('/attendance/detail/{id}', function ($id) {
     ]);
 })->name('attendance.detail');
 
-// 一般ユーザー用
-Route::get('/stamp_correction_request/user', function () {
-    return view('stamp_correction_request_list_user');
-})->name('stamp_correction_request.user');
-
-// 管理者用
-Route::get('/stamp_correction_request/admin', function () {
-    return view('stamp_correction_request_list_admin');
-})->name('stamp_correction_request.admin');
+// 一般ユーザー用・管理者共通、後程修正
+Route::get('/stamp_correction_request', function () {
+    return view('stamp_correction_request_list');
+})->name('stamp_correction_request');
 
 Route::get('/admin/login', function () {
     return view('admin.admin_login');
@@ -77,7 +72,7 @@ Route::get('/admin/attendance/list', function () {
 })->name('admin.attendance.list');
 
 Route::get('/admin/attendance/{id}', function ($id) {
-    return view('admin_attendance_detail', [
+    return view('admin.admin_attendance_detail', [
         'name' => '西 伶奈',
         'date' => '2023年6月1日',
         'start_time' => '09:00',
@@ -89,7 +84,7 @@ Route::get('/admin/attendance/{id}', function ($id) {
 })->name('admin.attendance.detail');
 
 Route::get('/admin/staff/list', function () {
-    return view('admin_staff_list');
+    return view('admin.admin_staff_list');
 })->name('admin.staff.list');
 
 Route::get('/admin/attendance/staff/{id}', function ($id) {
@@ -118,14 +113,14 @@ Route::get('/admin/attendance/staff/{id}', function ($id) {
         // ...必要な日数分追加
     ];
 
-    return view('admin_attendance_staff', [
+    return view('admin.admin_attendance_staff', [
         'staff_name' => '西 伶奈',
         'records' => $records,
     ]);
 })->name('admin.attendance.staff');
 
 Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', function ($id) {
-    return view('stamp_correction_request_approve', [
+    return view('admin.stamp_correction_request_approve', [
         'id' => $id,
         'name' => '西 伶奈',
         'date' => '2023年6月1日',

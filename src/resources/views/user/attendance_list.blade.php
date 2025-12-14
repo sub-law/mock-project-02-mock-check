@@ -29,7 +29,7 @@
     <table class="attendance-table">
         <thead>
             <tr>
-                <th>日付</th>
+                <th class="status-col">日付</th>
                 <th>出勤</th>
                 <th>退勤</th>
                 <th>休憩</th>
@@ -45,7 +45,7 @@
                 <td>18:00</td>
                 <td>1:00</td>
                 <td>8:00</td>
-                <td class="detail-cell"><a href="{{ route('attendance.detail', ['id' => 1]) }}">詳細</a></td>
+                <td class="detail-cell">詳細</a></td>
 
             </tr>
             <tr>
@@ -54,7 +54,7 @@
                 <td>18:00</td>
                 <td>1:00</td>
                 <td>8:00</td>
-                <td class="detail-cell"><a href="{{ route('attendance.detail', ['id' => 1]) }}">詳細</a></td>
+                <td class="detail-cell">詳細</a></td>
 
             </tr>
         </tbody>
