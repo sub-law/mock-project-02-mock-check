@@ -59,9 +59,9 @@ Route::get('/attendance/detail/{id}', function ($id) {
 })->name('attendance.detail');
 
 // 一般ユーザー用・管理者共通、後程修正
-Route::get('/stamp_correction_request', function () {
+Route::get('/stamp_correction_request_list', function () {
     return view('stamp_correction_request_list');
-})->name('stamp_correction_request');
+})->name('stamp.correction.request.list');
 
 Route::get('/admin/login', function () {
     return view('admin.admin_login');

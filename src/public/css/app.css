@@ -48,7 +48,7 @@ header img {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-wrap: wrap; /* ←追加 */
+    flex-wrap: wrap;
     gap: 40px;
 }
 

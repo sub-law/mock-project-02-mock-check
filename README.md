@@ -62,11 +62,11 @@ MailHog
 # 勤怠登録画面（一般ユーザー）	http://localhost/attendance
 # 勤怠一覧画面（一般ユーザー）	http://localhost/attendance/list
 勤怠詳細画面（一般ユーザー）	http://localhost/attendance/detail/{id}
-申請一覧画面（一般ユーザー）	http://localhost/stamp_correction_request
+# 申請一覧画面（一般ユーザー）	http://localhost/stamp_correction_request_list
 # ログイン画面（管理者）	http://localhost/admin/login
 勤怠一覧画面（管理者）	http://localhost/admin/attendance/list
 勤怠詳細画面（管理者）	http://localhost/admin/attendance/{id}
 スタッフ一覧画面（管理者）	http://localhost/admin/staff/list
 スタッフ別勤怠一覧画面（管理者）	http://localhost/admin/attendance/staff/{id}
-申請一覧画面（管理者）	http://localhost/stamp_correction_request/list
+# 申請一覧画面（管理者）	http://localhost/stamp_correction_request_list
 修正申請承認画面（管理者）	http://localhost/stamp_correction_request/approve/{attendance_correct_request_id}

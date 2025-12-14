@@ -22,7 +22,7 @@
     <table class="request-table">
         <thead>
             <tr>
-                <th class="status-col">状態</th>
+                <th>状態</th>
                 <th>名前</th>
                 <th>対象日時</th>
                 <th>申請理由</th>
