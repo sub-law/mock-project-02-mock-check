@@ -1,6 +1,6 @@
 @extends('layouts.app_user')
 
-@section('title', '勤怠一覧画面')
+@section('title', '勤怠一覧画面（管理者）')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/attendance_list.css') }}">
@@ -19,7 +19,12 @@
             <img src="{{ asset('images/arrow.png') }}" alt="前月" class="left-icon">
             前月
         </button>
-        <span class="calendar-label">カレンダー</span>
+
+        <div class="calendar-wrapper">
+            <img src="{{ asset('images/calendar.png') }}" alt="カレンダー" class="calendar-icon">
+            <span class="calendar-label">{{ now()->format('Y年m月d日') }}</span>
+        </div>
+
         <button class="nav-button prev-month">
             <img src="{{ asset('images/arrow.png') }}" alt="翌月" class="right-icon">
             翌月

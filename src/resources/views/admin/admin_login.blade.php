@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '管理者ログイン画面')
+@section('title', 'ログイン画面（管理者）')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/login.css') }}">

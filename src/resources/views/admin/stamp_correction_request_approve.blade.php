@@ -70,7 +70,7 @@
         </tbody>
     </table>
     <div class="attendance-footer">
-        <button type="submit" class="fix-button">修正</button>
+        <button type="submit" class="fix-button">承認</button>
     </div>
 
     {{--<form action="{{ route('attendance.update', $attendance->id ?? 1) }}" method="POST">
@@ -105,7 +105,7 @@
         <textarea id="note" name="note" rows="3">遅延のため修正申請</textarea>
     </div>
 
-    <button type="submit" class="fix-button">修正</button>
+    <button type="submit" class="fix-button">承認</button>
     </form>--}}
 
 </div>

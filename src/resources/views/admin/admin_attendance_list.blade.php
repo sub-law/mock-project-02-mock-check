@@ -11,7 +11,7 @@
 
     <div class="attendance-header">
         <div class="attendance-line"></div>
-        <h1 class="attendance-title">2023年6月1日の勤怠</h1>
+        <h1 class="attendance-title">{{ now()->format('Y年m月d日') }}の勤怠</h1>
     </div>
 
     <div class="attendance-navigation">
@@ -19,7 +19,12 @@
             <img src="{{ asset('images/arrow.png') }}" alt="前月" class="left-icon">
             前月
         </button>
-        <span class="calendar-label">カレンダー</span>
+
+        <div class="calendar-wrapper">
+            <img src="{{ asset('images/calendar.png') }}" alt="カレンダー" class="calendar-icon">
+            <span class="calendar-label">{{ now()->format('Y年m月d日') }}</span>
+        </div>
+
         <button class="nav-button prev-month">
             <img src="{{ asset('images/arrow.png') }}" alt="翌月" class="right-icon">
             翌月
