@@ -56,6 +56,19 @@ body {
     display: inline-block;
 }
 
+.calendar-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.calendar-icon {
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
+
 .right-icon {
     width: 20px;
     height: 15px;
@@ -107,6 +120,7 @@ body {
 
 .attendance-table th,
 .attendance-table td {
+    background-color: #ffffff;
     color: #737373;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
@@ -127,7 +141,7 @@ body {
 }
 
 .attendance-table th {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     font-weight: 700;
 }
 

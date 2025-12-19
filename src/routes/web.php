@@ -46,21 +46,13 @@ Route::get('/attendance/list', function () {
     return view('user.attendance_list');
 })->name('attendance.list');
 
-Route::get('/attendance/detail/{id}', function ($id) {
-    return view('user.attendance_detail', [
-        'name' => '西 伶奈',
-        'date' => '2023年6月1日',
-        'start_time' => '09:00',
-        'end_time' => '18:00',
-        'break1' => '12:00',
-        'break2' => null,
-        'note' => '電車遅延のため',
-    ]);
+Route::get('/attendance/detail/{id}', function () {
+    return view('user.attendance_detail');
 })->name('attendance.detail');
 
 // 一般ユーザー用・管理者共通、後程修正
 Route::get('/stamp_correction_request_list', function () {
-    return view('stamp_correction_request_list');
+    return view('common.stamp_correction_request_list');
 })->name('stamp.correction.request.list');
 
 Route::get('/admin/login', function () {
@@ -71,63 +63,18 @@ Route::get('/admin/attendance/list', function () {
     return view('admin.admin_attendance_list');
 })->name('admin.attendance.list');
 
-Route::get('/admin/attendance/{id}', function ($id) {
-    return view('admin.attendance_detail', [
-        'name' => '西 伶奈',
-        'date' => '2023年6月1日',
-        'start_time' => '09:00',
-        'end_time' => '18:00',
-        'break1' => '12:00',
-        'break2' => null,
-        'note' => '電車遅延のため',
-    ]);
+Route::get('/admin/attendance/{id}', function () {
+    return view('admin.attendance_detail');
 })->name('admin.attendance.detail');
 
 Route::get('/admin/staff/list', function () {
     return view('admin.admin_staff_list');
 })->name('admin.staff.list');
 
-Route::get('/admin/attendance/staff/{id}', function ($id) {
-    $records = [
-        [
-            'date' => '2023-06-01',
-            'start_time' => '09:00',
-            'end_time' => '18:00',
-            'break_time' => '1:00',
-            'total_time' => '8:00',
-        ],
-        [
-            'date' => '2023-06-02',
-            'start_time' => '09:00',
-            'end_time' => '18:00',
-            'break_time' => '1:00',
-            'total_time' => '8:00',
-        ],
-        [
-            'date' => '2023-06-03',
-            'start_time' => null,
-            'end_time' => null,
-            'break_time' => null,
-            'total_time' => null,
-        ],
-        // ...必要な日数分追加
-    ];
-
-    return view('admin.admin_attendance_staff', [
-        'staff_name' => '西 伶奈',
-        'records' => $records,
-    ]);
+Route::get('/admin/attendance/staff/{id}', function () {
+    return view('admin.admin_attendance_staff');
 })->name('admin.attendance.staff');
 
-Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', function ($id) {
-    return view('admin.stamp_correction_request_approve', [
-        'id' => $id,
-        'name' => '西 伶奈',
-        'date' => '2023年6月1日',
-        'start_time' => '09:00',
-        'end_time' => '18:00',
-        'break1' => '12:00',
-        'break2' => null,
-        'note' => '電車遅延のため ',
-    ]);
+Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', function () {
+    return view('admin.stamp_correction_request_approve');
     })->name('stamp.correction.request.approve');

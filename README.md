@@ -67,6 +67,6 @@ MailHog
 # 勤怠一覧画面（管理者）	http://localhost/admin/attendance/list
 # 勤怠詳細画面（管理者）	http://localhost/admin/attendance/{id}
 # スタッフ一覧画面（管理者）	http://localhost/admin/staff/list
-スタッフ別勤怠一覧画面（管理者）	http://localhost/admin/attendance/staff/{id}
+# スタッフ別勤怠一覧画面（管理者）	http://localhost/admin/attendance/staff/{id}
 # 申請一覧画面（管理者）	http://localhost/stamp_correction_request_list
-修正申請承認画面（管理者）	http://localhost/stamp_correction_request/approve/{attendance_correct_request_id}
+# 修正申請承認画面（管理者）	http://localhost/stamp_correction_request/approve/{attendance_correct_request_id}
