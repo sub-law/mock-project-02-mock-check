@@ -1,0 +1,147 @@
+body {
+    background: #F0EFF2;
+}
+
+.attendance-header {
+    max-width: 900px;
+    margin: 100px auto;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.attendance-line {
+    width: 0;
+    height: 40px;
+    border-left: 8px solid #000000;
+    margin-right: 16px;
+}
+
+.attendance-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+.attendance-list-wrapper {
+    max-width: 900px;
+    margin: 100px auto;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.attendance-navigation {
+    width: 900px;
+    height: 60px;
+    margin: 40px auto 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    opacity: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.left-icon {
+    width: 20px;
+    height: 15px;
+    opacity: 1;
+    transform: rotate(0deg);
+    display: inline-block;
+}
+
+.right-icon {
+    width: 20px;
+    height: 15px;
+    opacity: 1;
+    transform: rotate(180deg);
+    display: inline-block;
+}
+
+.nav-button {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #000;
+    transition: color 0.3s;
+}
+
+.nav-button:hover {
+    color: #737373;
+}
+
+.calendar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+}
+
+.attendance-table {
+    width: 900px;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 1;
+}
+
+.attendance-table th.status-col,
+.attendance-table td:first-child {
+    text-align: center;
+    padding-left: 30px;
+    width: 100px;
+    white-space: nowrap;
+}
+
+.attendance-table th,
+.attendance-table td {
+    color: #737373;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0.15em;
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #E1E1E1;
+    border-left: none;
+    border-right: none;
+    padding: 12px;
+    text-align: center;
+}
+
+.attendance-table thead tr {
+    border-bottom: 3px solid #E1E1E1;
+}
+
+.attendance-table th {
+    background-color: #f5f5f5;
+    font-weight: 700;
+}
+
+.attendance-table td.detail-cell {
+    color: #000000;
+}
+
+.detail-cell a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.detail-cell a:hover {
+    color: #737373;
+    text-decoration: underline;
+}

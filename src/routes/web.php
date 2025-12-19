@@ -68,11 +68,11 @@ Route::get('/admin/login', function () {
 })->name('admin.login');
 
 Route::get('/admin/attendance/list', function () {
-    return view('admin_attendance_list');
+    return view('admin.admin_attendance_list');
 })->name('admin.attendance.list');
 
 Route::get('/admin/attendance/{id}', function ($id) {
-    return view('admin.admin_attendance_detail', [
+    return view('admin.attendance_detail', [
         'name' => '西 伶奈',
         'date' => '2023年6月1日',
         'start_time' => '09:00',
