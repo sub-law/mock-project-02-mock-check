@@ -11,12 +11,18 @@
     <div class="login-container">
         <h1 class="login-title">ログイン</h1>
 
+        @if (session('status'))
+        <div class="flash-message">
+            {{ session('status') }}
+        </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}" class="login-form">
             @csrf
 
             <div class="form-group">
                 <label for="email">メールアドレス</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+                <input id="email" type="text" name="email" value="{{ old('email') }}">
                 @error('email')
                 <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -24,7 +30,7 @@
 
             <div class="form-group">
                 <label for="password">パスワード</label>
-                <input id="password" type="password" name="password" required>
+                <input id="password" type="password" name="password">
                 @error('password')
                 <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -38,4 +44,17 @@
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const flash = document.querySelector('.flash-message');
+        if (flash) {
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                flash.style.transition = 'opacity 0.5s ease';
+            }, 3000);
+        }
+    });
+</script>
+
 @endsection

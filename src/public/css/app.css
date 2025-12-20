@@ -59,6 +59,21 @@ header img {
     text-align: center;
 }
 
+.admin-nav button {
+    display: inline-block;
+    width: auto;
+    height: 29px;
+    line-height: 29px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
 @media screen and (max-width: 1399px) {
     body {
         overflow-x: auto;

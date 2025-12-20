@@ -11,12 +11,12 @@
     <div class="register-container">
         <h1 class="register-title">会員登録</h1>
 
-        <form method="POST" action="{{ route('register') }}" class="register-form">
+        <form method="POST" action="{{ route('register.post') }}" class="register-form">
             @csrf
 
             <div class="form-group">
                 <label for="name">名前</label>
-                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
+                <input id="name" type="text" name="name" value="{{ old('name') }}">
                 @error('name')
                 <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -24,7 +24,7 @@
 
             <div class="form-group">
                 <label for="email">メールアドレス</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required>
+                <input id="email" type="text" name="email" value="{{ old('email') }}">
                 @error('email')
                 <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -32,7 +32,7 @@
 
             <div class="form-group">
                 <label for="password">パスワード</label>
-                <input id="password" type="password" name="password" required>
+                <input id="password" type="password" name="password">
                 @error('password')
                 <span class="error-message">{{ $message }}</span>
                 @enderror
@@ -40,7 +40,7 @@
 
             <div class="form-group">
                 <label for="password_confirmation">パスワード確認</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required>
+                <input id="password_confirmation" type="password" name="password_confirmation">
                 @error('password_confirmation')
                 <span class="error-message">{{ $message }}</span>
                 @enderror

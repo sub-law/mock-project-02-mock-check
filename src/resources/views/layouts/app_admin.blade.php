@@ -24,8 +24,12 @@
                 {{-- <li><a href="{{ route('stamp.correction.request.admin') }}">申請一覧</a></li> --}}
                 <li><a href="{{ url('stamp_correction_request_list') }}">申請一覧</a></li>
 
-                {{-- <li><a href="{{ route('logout') }}">ログアウト</a></li> --}}
-                <li><a href="{{ url('/logout') }}">ログアウト</a></li>
+                <li>
+                    <form method="POST" action="{{ route('admin.logout') }}">
+                        @csrf
+                        <button type="submit">ログアウト</button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </header>

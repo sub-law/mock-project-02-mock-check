@@ -96,3 +96,21 @@ body {
     font-size: 13px;
     color: #d9534f;
 }
+
+.flash-message {
+    background-color: #e0ffe0;
+    border: 1px solid #00aa00;
+    color: #006600;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+    box-shadow: 0 0 0 1000px #fff inset !important;
+    background-color: #fff !important;
+}

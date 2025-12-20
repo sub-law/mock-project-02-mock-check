@@ -18,9 +18,13 @@
                 <li><a href="{{ route('attendance') }}">勤怠</a></li>
                 <li><a href="{{ route('attendance.list') }}">勤怠一覧</a></li>
                 <li><a href="{{ route('stamp.correction.request.list') }}">申請</a></li>
-                
-                {{-- <li><a href="{{ route('logout') }}">ログアウト</a></li> --}}
-                <li><a href="{{ url('/logout') }}">ログアウト</a></li>
+
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit">ログアウト</button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </header>

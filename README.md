@@ -79,6 +79,7 @@ password  password123
 
 ## 動作確認URL一覧
 会員登録画面（一般ユーザー）：	http://localhost/register
+ログイン画面（一般ユーザー）	http://localhost/login
 ログイン画面（管理者）：	http://localhost/admin/login
 MySQL画面：	http://localhost:8080
 mailhog認証画面：	http://localhost:8025/
@@ -114,3 +115,8 @@ MailHog
 # スタッフ別勤怠一覧画面（管理者）	http://localhost/admin/attendance/staff/{id}
 # 申請一覧画面（管理者）	http://localhost/stamp_correction_request_list
 # 修正申請承認画面（管理者）	http://localhost/stamp_correction_request/approve/{attendance_correct_request_id}
+
+
+ 会員登録画面（一般ユーザー）	http://localhost/register
+ ログイン画面（一般ユーザー）	http://localhost/login
+ ログイン画面（管理者）	http://localhost/admin/login
