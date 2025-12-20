@@ -24,6 +24,50 @@ php artisan cache:clear
 
 PHPコンテナから出る　Ctrl+D
 
+### ダミーデータユーザー情報（管理者1名、一般ユーザー6名）
+
+## 1
+name  管理者
+email  admin@example.com
+password  password123
+メール認証済み
+
+## 2
+name  西　伶奈
+email  reina.n@coachtech.com
+password  password123
+メール認証済み
+
+## 3
+name  山田　太郎
+email  taro.y@coachtech.com
+password  password123
+メール認証済み
+
+## 4
+name  増田　一世
+email  issei.m@coachtech.com
+password  password123
+メール認証済み
+
+## 5
+name  山本　敬吉
+email  keikichi.y@coachtech.com
+password  password123
+メール認証済み
+
+## 6
+name  秋田　朋美
+email  tomomi.a@coachtech.com
+password  password123
+メール認証済み
+
+## 7
+name  中西　教夫
+email  norio.n@coachtech.com
+password  password123
+メール認証済み
+
 ### MailHogのメール認証手順
 1. 新規ユーザー登録を行う
 2. メール認証誘導画面に遷移、「認証はこちらから」のボタンをクリック

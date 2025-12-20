@@ -22,7 +22,7 @@
                 <li><a href="{{ url('/admin/staff/list') }}">スタッフ一覧</a></li>
 
                 {{-- <li><a href="{{ route('stamp.correction.request.admin') }}">申請一覧</a></li> --}}
-                <li><a href="{{ url('/admin/request/list') }}">申請一覧</a></li>
+                <li><a href="{{ url('stamp_correction_request_list') }}">申請一覧</a></li>
 
                 {{-- <li><a href="{{ route('logout') }}">ログアウト</a></li> --}}
                 <li><a href="{{ url('/logout') }}">ログアウト</a></li>

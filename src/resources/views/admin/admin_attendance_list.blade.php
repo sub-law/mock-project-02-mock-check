@@ -15,9 +15,9 @@
     </div>
 
     <div class="attendance-navigation">
-        <button class="nav-button prev-month">
-            <img src="{{ asset('images/arrow.png') }}" alt="前月" class="left-icon">
-            前月
+        <button class="nav-button nav-prev">
+            <img src="{{ asset('images/arrow.png') }}" alt="前日" class="left-icon">
+            前日
         </button>
 
         <div class="calendar-wrapper">
@@ -25,9 +25,9 @@
             <span class="calendar-label">{{ now()->format('Y年m月d日') }}</span>
         </div>
 
-        <button class="nav-button prev-month">
-            <img src="{{ asset('images/arrow.png') }}" alt="翌月" class="right-icon">
-            翌月
+        <button class="nav-button nav-next">
+            <img src="{{ asset('images/arrow.png') }}" alt="翌日" class="right-icon">
+            翌日
         </button>
     </div>
 
