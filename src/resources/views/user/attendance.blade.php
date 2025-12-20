@@ -9,6 +9,12 @@
 @section('content')
 <div class="attendance-wrapper">
 
+    @if (session('message'))
+    <div class="flash-message">
+        {{ session('message') }}
+    </div>
+    @endif
+
     {{-- ステータス表示 --}}
     <p class="attendance-status">勤務外</p>
 
@@ -31,4 +37,16 @@
     </div>
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const flash = document.querySelector('.flash-message');
+        if (flash) {
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                flash.style.transition = 'opacity 0.5s ease';
+            }, 3000);
+        }
+    });
+</script>
+
 @endsection

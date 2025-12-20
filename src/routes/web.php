@@ -7,29 +7,10 @@ use App\Http\Controllers\Admin\AdminAttendanceController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\RegisterController;
+use App\Http\Controllers\User\VerifyEmailController;
+use App\Http\Controllers\User\EmailVerificationNotificationController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-//Route::get('/', function () {
-//  return view('layouts/app');
-//});
-
-//Route::get('/admin', function () {
-//    return view('layouts/app_admin');
-//});
-
-//Route::get('/user', function () {
-//    return view('layouts/app_user');
-//});
 
 // 管理者ログイン
 Route::get('/admin/login',  [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
@@ -51,9 +32,22 @@ Route::get('/login', [LoginController::class, 'showloginform'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/verify-email', function () {
+// 認証待ち画面
+Route::get('/email/verify', function () {
     return view('user.verify');
-    })->name('verification.verify');
+})->middleware('auth')->name('verification.notice');
+
+// 認証リンク
+Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
+
+// 認証メール再送
+Route::post(
+    '/email/verification-notification',
+    [EmailVerificationNotificationController::class, 'store']
+)->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
 
 Route::get('/attendance', function () {
     return view('user.attendance');

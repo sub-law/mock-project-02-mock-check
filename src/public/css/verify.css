@@ -38,7 +38,12 @@
     text-align: center;
 }
 
-.form-resend{
+.form-resend {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.form-resend-button {
     background: none;
     border: none;
     color: #007bff;
@@ -47,8 +52,7 @@
     font-size: 20px;
     font-weight: 400;
     padding: 0;
-    margin-top: 24px;
-    }
+}
 
 .form-link-button {
     background: none;

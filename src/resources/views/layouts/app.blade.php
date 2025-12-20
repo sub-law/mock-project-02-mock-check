@@ -14,7 +14,7 @@
         <img src="{{ asset('images/logo.svg') }}" alt="COACHTECHロゴ">
 
         <nav class="admin-nav">
-            @if(Auth::check())
+            @if(Auth::check() && Auth::user()->hasVerifiedEmail())
             <ul>
 
                 {{-- 管理者メニュー --}}

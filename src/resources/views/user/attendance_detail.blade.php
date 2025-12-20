@@ -18,7 +18,7 @@
         <tbody>
             <tr class="name-cell">
                 <th>名前</th>
-                <td>西  伶奈</td>
+                <td>西 伶奈</td>
             </tr>
             <tr>
                 <th>日付</th>

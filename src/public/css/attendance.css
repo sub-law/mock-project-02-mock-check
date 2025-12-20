@@ -73,6 +73,17 @@
     align-items: center;
 }
 
+.flash-message {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #e0f7fa;
+    color: #00796b;
+    border: 1px solid #b2ebf2;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
 .attendance-button:hover {
     background-color: #737373;
 }

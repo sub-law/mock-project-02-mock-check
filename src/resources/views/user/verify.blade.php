@@ -25,18 +25,10 @@
     </div>
 
     <div class="form-resend">
-        <p>
-            認証メールを再送する
-        </p>
-        {{-- 仮置き：メール認証再送フォーム --}}
-        {{--
-<form method="POST" action="{{ route('verification.send') }}">
-        @csrf
-        <button type="submit">認証メールを再送する</button>
+        <form method="POST" action="{{ route('verification.send') }}">
+            @csrf
+            <button type="submit" class="form-resend-button">認証メールを再送する</button>
         </form>
-        --}}
-
     </div>
-
 </div>
 @endsection
