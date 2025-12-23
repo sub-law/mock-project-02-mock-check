@@ -16,6 +16,9 @@ GID=1000
 make build
 make init
 
+## PHPコンテナ内への移動方法
+docker compose exec php bash
+
 ## 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
 php artisan view:clear
 php artisan route:clear
