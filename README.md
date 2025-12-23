@@ -97,9 +97,6 @@ MailHog
 - ER図は設計の参考用です。実装と完全一致しない場合があります。
 
 ###　仮画面確認用　URL
-# ヘッダー部分	http://localhost
-# ヘッダー部分	http://localhost/admin
-# ヘッダー部分	http://localhost/user
 
 # 会員登録画面（一般ユーザー）	http://localhost/register
 # ログイン画面（一般ユーザー）	http://localhost/login
@@ -117,6 +114,4 @@ MailHog
 # 修正申請承認画面（管理者）	http://localhost/stamp_correction_request/approve/{attendance_correct_request_id}
 
 
- 会員登録画面（一般ユーザー）	http://localhost/register
- ログイン画面（一般ユーザー）	http://localhost/login
- ログイン画面（管理者）	http://localhost/admin/login
+ER図![alt text](模擬案件②ER図.png)
