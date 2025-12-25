@@ -16,7 +16,17 @@
     @endif
 
     {{-- ステータス表示 --}}
-    <p class="attendance-status">勤務外</p>
+    <p class="attendance-status">
+        @if (!$attendance)
+        勤務外
+        @elseif ($activeBreak)
+        休憩中
+        @elseif (!$attendance->clock_out)
+        出勤中
+        @else
+        勤務終了
+        @endif
+    </p>
 
     {{-- 年月日表示 --}}
     <p class="attendance-date">{{ now()->format('Y年m月d日') }}</p>
@@ -24,19 +34,55 @@
     {{-- 時間表示 --}}
     <p class="attendance-time">{{ now()->format('H:i') }}</p>
 
-    {{-- 出勤前は出勤ボタンのみ表示 --}}
     <div class="attendance-actions">
-        <button type="submit" class="attendance-button start-button">出勤</button>
-        {{-- 仮置きフォーム（後でコントローラとルートが整ったら使用） --}}
-        {{--
-        <form method="POST" action="{{ route('attendance.start') }}">
-        @csrf
-        <button type="submit" class="attendance-button start-button">出勤</button>
+
+        {{-- 出勤前 --}}
+        @if (!$attendance)
+
+        <form method="POST" action="{{ route('attendance.clockIn') }}">
+            @csrf
+            <button type="submit" class="attendance-button start-button">出勤</button>
         </form>
-        --}}
+
+        {{-- 出勤後（退勤前） --}}
+        @elseif (!$attendance->clock_out)
+
+        {{-- ★ 休憩中 --}}
+        @if ($activeBreak)
+
+        <form method="POST" action="{{ route('attendance.breakOut') }}">
+            @csrf
+            <button type="submit" class="attendance-button break-button">休憩戻</button>
+        </form>
+
+        {{-- ★ 通常勤務中（休憩入＋退勤） --}}
+        @else
+
+        <div class="attendance-buttons-row">
+            <form method="POST" action="{{ route('attendance.clockOut') }}">
+                @csrf
+                <button type="submit" class="attendance-button end-button">退勤</button>
+            </form>
+
+            <form method="POST" action="{{ route('attendance.breakIn') }}">
+                @csrf
+                <button type="submit" class="attendance-button break-button">休憩入</button>
+            </form>
+        </div>
+
+        @endif
+
+        {{-- 退勤後 --}}
+        @else
+
+        <p class="attendance-message">お疲れ様でした</p>
+
+        @endif
+
     </div>
 
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const flash = document.querySelector('.flash-message');

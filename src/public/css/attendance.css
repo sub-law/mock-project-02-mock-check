@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background: #F0EFF2;
 }
 
 .attendance-status {
@@ -73,6 +74,19 @@
     align-items: center;
 }
 
+.attendance-buttons-row {
+    display: flex;
+    gap: 100px;
+    /* ボタンの間隔 */
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.break-button {
+    background-color: #ffffff;
+    color: #000000;
+}
+
 .flash-message {
     margin-bottom: 20px;
     padding: 10px 15px;
@@ -86,4 +100,17 @@
 
 .attendance-button:hover {
     background-color: #737373;
+}
+
+.attendance-message {
+    width: 332px;
+    height: 31px;
+    line-height: 31px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.15em;
+    color: #000;
+    margin-top: 40px;
 }

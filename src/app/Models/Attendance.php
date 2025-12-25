@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Attendance extends Model
 {
     use HasFactory;
@@ -14,8 +15,11 @@ class Attendance extends Model
         'date',
         'clock_in',
         'clock_out',
+        'break_in',
+        'break_out',
         'status',
     ];
+
 
     /**
      * User（1）- Attendance（多）

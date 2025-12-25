@@ -22,7 +22,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('attendance');
+            return redirect()->route('attendance.index');
         }
 
         return back()->withErrors([

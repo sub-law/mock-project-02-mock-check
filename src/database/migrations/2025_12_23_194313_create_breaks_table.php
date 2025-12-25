@@ -14,21 +14,20 @@ class CreateBreaksTable extends Migration
     public function up()
     {
         Schema::create('breaks', function (Blueprint $table) {
-            $table->id(); // PK, bigint, NOT NULL
+            $table->id(); // PK
 
-            $table->unsignedBigInteger('attendance_id'); // FK, NOT NULL
+            $table->unsignedBigInteger('attendance_id'); // FK
 
-            $table->dateTime('break_start'); // NOT NULL
-            $table->dateTime('break_end');   // NOT NULL
+            $table->dateTime('break_start'); // 休憩開始（必須）
+            $table->dateTime('break_end')->nullable(); // ★ 休憩終了（休憩中は null）
 
-            $table->timestamps(); // created_at, updated_at（どちらも NOT NULL）
+            $table->timestamps();
 
-            // FOREIGN KEY
+            // 外部キー
             $table->foreign('attendance_id')
                 ->references('id')
                 ->on('attendances')
                 ->onDelete('cascade');
-            // ※ cascade は要件に応じて変更可能
         });
     }
 

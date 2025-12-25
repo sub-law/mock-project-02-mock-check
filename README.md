@@ -16,6 +16,9 @@ GID=1000
 make build
 make init
 
+## コンテナの起動コマンド
+docker-compose up -d --build
+
 ## PHPコンテナ内への移動方法
 docker compose exec php bash
 
@@ -49,9 +52,7 @@ password  password123
 
 ## 4
 name  増田　一世
-email  issei.m@coachtech.com
-password  password123
-メール認証済み
+email  issei.m@coachtech.comメール認証済み
 
 ## 5
 name  山本　敬吉
@@ -61,7 +62,9 @@ password  password123
 
 ## 6
 name  秋田　朋美
-email  tomomi.a@coachtech.com
+email  tomomi.a@coach
+password  password123
+tech.com
 password  password123
 メール認証済み
 

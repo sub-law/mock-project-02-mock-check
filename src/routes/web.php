@@ -9,7 +9,7 @@ use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\VerifyEmailController;
 use App\Http\Controllers\User\EmailVerificationNotificationController;
-
+use App\Http\Controllers\AttendanceController;
 
 
 // 管理者ログイン
@@ -49,9 +49,22 @@ Route::post(
 )->middleware(['auth', 'throttle:6,1'])
     ->name('verification.send');
 
-Route::get('/attendance', function () {
-    return view('user.attendance');
-})->name('attendance');
+// 勤怠画面・出勤・退勤機能・休憩機能
+Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
+Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])
+    ->name('attendance.clockOut');
+Route::post('/attendance/break-in', [AttendanceController::class, 'breakIn'])
+    ->name('attendance.breakIn');
+Route::post('/attendance/break-out', [AttendanceController::class, 'breakOut'])
+    ->name('attendance.breakOut');
+
+
+
+
+//Route::get('/attendance', function () {
+//    return view('user.attendance');
+//})->name('attendance');
 
 Route::get('/attendance/list', function () {
     return view('user.attendance_list');
