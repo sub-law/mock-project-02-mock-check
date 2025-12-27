@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminAttendanceController;
-
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\VerifyEmailController;
@@ -62,9 +61,6 @@ Route::post('/attendance/break-out', [AttendanceController::class, 'breakOut'])
 
 
 
-//Route::get('/attendance', function () {
-//    return view('user.attendance');
-//})->name('attendance');
 
 Route::get('/attendance/list', function () {
     return view('user.attendance_list');

@@ -15,10 +15,25 @@ class Attendance extends Model
         'date',
         'clock_in',
         'clock_out',
-        'break_in',
-        'break_out',
         'status',
     ];
+
+    public function getStatusLabel()
+    {
+        if (!$this->clock_in) {
+            return '勤務外';
+        }
+
+        if ($this->breaks()->whereNull('break_end')->exists()) {
+            return '休憩中';
+        }
+
+        if (!$this->clock_out) {
+            return '出勤中';
+        }
+
+        return '退勤済';
+    }
 
 
     /**

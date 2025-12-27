@@ -17,15 +17,7 @@
 
     {{-- ステータス表示 --}}
     <p class="attendance-status">
-        @if (!$attendance)
-        勤務外
-        @elseif ($activeBreak)
-        休憩中
-        @elseif (!$attendance->clock_out)
-        出勤中
-        @else
-        勤務終了
-        @endif
+        {{ $attendance ? $attendance->getStatusLabel() : '勤務外' }}
     </p>
 
     {{-- 年月日表示 --}}

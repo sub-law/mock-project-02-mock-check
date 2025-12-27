@@ -92,8 +92,8 @@ body {
 .error-message {
     display: block;
     margin-top: 6px;
-    font-size: 13px;
-    color: #d9534f;
+    font-size: 18px;
+    color: #ff0000;
 }
 
 input:-webkit-autofill,
