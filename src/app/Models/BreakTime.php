@@ -17,6 +17,12 @@ class BreakTime extends Model
         'break_end',
     ];
 
+    protected $casts = [
+        'break_start' => 'datetime',
+        'break_end' => 'datetime',
+    ];
+
+
     /**
      * BreakTime（多）- Attendance（1）
      */

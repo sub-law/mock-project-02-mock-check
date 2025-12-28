@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '勤怠一覧画面（管理者）')
+@section('title', '勤怠一覧画面')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/attendance_list.css') }}">
@@ -15,20 +15,33 @@
     </div>
 
     <div class="attendance-navigation">
-        <button class="nav-button nav-prev">
+        {{-- 前月 --}}
+        <a href="{{ route('attendance.list', ['month' => $currentMonth->copy()->subMonth()->format('Y-m')]) }}"
+            class="nav-button nav-prev">
             <img src="{{ asset('images/arrow.png') }}" alt="前月" class="left-icon">
             前月
-        </button>
+        </a>
 
         <div class="calendar-wrapper">
-            <img src="{{ asset('images/calendar.png') }}" alt="カレンダー" class="calendar-icon">
-            <span class="calendar-label">{{ now()->format('Y年m月d日') }}</span>
+            <label id="calendarTrigger">
+                <img src="{{ asset('images/calendar.png') }}"
+                    alt="カレンダー"
+                    class="calendar-icon">
+            </label>
+
+            <input type="month" id="monthPicker" class="month-picker-hidden">
+
+            <span class="calendar-label">{{ $currentMonth->format('Y/m') }}</span>
         </div>
 
-        <button class="nav-button nav-next">
+
+
+        {{-- 翌月 --}}
+        <a href="{{ route('attendance.list', ['month' => $currentMonth->copy()->addMonth()->format('Y-m')]) }}"
+            class="nav-button nav-next">
             <img src="{{ asset('images/arrow.png') }}" alt="翌月" class="right-icon">
             翌月
-        </button>
+        </a>
     </div>
 
     <table class="attendance-table">
@@ -43,27 +56,71 @@
             </tr>
         </thead>
         <tbody>
-            {{-- 仮データ --}}
-            <tr>
-                <td>12/13(土)</td>
-                <td>09:00</td>
-                <td>18:00</td>
-                <td>1:00</td>
-                <td>8:00</td>
-                <td class="detail-cell">詳細</a></td>
+            @foreach ($days as $day)
+            @php
+            $attendance = $attendances[$day->format('Y-m-d')] ?? null;
+            @endphp
 
-            </tr>
             <tr>
-                <td>12/14(日)</td>
-                <td>09:00</td>
-                <td>18:00</td>
-                <td>1:00</td>
-                <td>8:00</td>
-                <td class="detail-cell">詳細</a></td>
+                {{-- 日付 --}}
+                <td>{{ $day->locale('ja')->isoFormat('MM/DD(dd)') }}</td>
 
+                {{-- 出勤 --}}
+                <td>
+                    {{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '' }}
+                </td>
+
+                {{-- 退勤 --}}
+                <td>
+                    {{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}
+                </td>
+
+                {{-- 休憩 --}}
+                <td>
+                    @if ($attendance)
+                    @php
+                    $break = $attendance->getTotalBreakMinutes();
+                    $breakH = floor($break / 60);
+                    $breakM = $break % 60;
+                    @endphp
+                    {{ $breakH }}:{{ sprintf('%02d', $breakM) }}
+                    @else
+
+                    @endif
+                </td>
+
+                {{-- 合計 --}}
+                <td>
+                    @if ($attendance)
+                    @php
+                    $total = $attendance->getTotalWorkMinutes();
+                    $totalH = floor($total / 60);
+                    $totalM = $total % 60;
+                    @endphp
+                    {{ $totalH }}:{{ sprintf('%02d', $totalM) }}
+                    @else
+
+                    @endif
+                </td>
+
+                <td class="detail-cell">詳細</td>
             </tr>
+            @endforeach
         </tbody>
-    </table>
 
+        <script>
+            document.getElementById('calendarTrigger').addEventListener('click', function() {
+                document.getElementById('monthPicker').showPicker();
+            });
+
+            document.getElementById('monthPicker').addEventListener('change', function() {
+                const month = this.value;
+                if (month) {
+                    window.location.href = "{{ route('attendance.list') }}?month=" + month;
+                }
+            });
+        </script>
+
+    </table>
 </div>
 @endsection

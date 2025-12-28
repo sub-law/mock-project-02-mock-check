@@ -35,6 +35,8 @@ body {
     border-radius: 10px;
 }
 
+
+
 .attendance-navigation {
     width: 900px;
     height: 60px;
@@ -61,12 +63,31 @@ body {
     align-items: center;
     justify-content: center;
     gap: 15px;
+    position: relative;
+}
+
+.month-picker-hidden {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    cursor: pointer;
 }
 
 .calendar-icon {
     width: 25px;
     height: 25px;
-    display: inline-block;
+}
+
+.calendar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    transform: translateY(-3px);
 }
 
 .right-icon {
@@ -90,13 +111,6 @@ body {
 
 .nav-button:hover {
     color: #737373;
-}
-
-.calendar-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #000;
 }
 
 .attendance-table {

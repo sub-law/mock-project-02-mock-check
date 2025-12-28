@@ -35,6 +35,31 @@ class Attendance extends Model
         return '退勤済';
     }
 
+    public function getTotalBreakMinutes()
+    {
+        return $this->breaks->sum(function ($break) {
+            if (!$break->break_end) {
+                return 0;
+            }
+            return $break->break_start->diffInMinutes($break->break_end);
+        });
+    }
+
+    public function getTotalWorkMinutes()
+    {
+        if (!$this->clock_in || !$this->clock_out) {
+            return 0;
+        }
+
+        $workMinutes = $this->clock_in->diffInMinutes($this->clock_out);
+        return $workMinutes - $this->getTotalBreakMinutes();
+    }
+
+    protected $casts = [
+        'clock_in' => 'datetime',
+        'clock_out' => 'datetime',
+        'date' => 'date',
+    ];
 
     /**
      * User（1）- Attendance（多）

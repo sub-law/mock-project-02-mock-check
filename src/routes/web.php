@@ -7,8 +7,10 @@ use App\Http\Controllers\Admin\AdminAttendanceController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\VerifyEmailController;
+use App\Http\Controllers\User\AttendanceListController;
 use App\Http\Controllers\User\EmailVerificationNotificationController;
 use App\Http\Controllers\AttendanceController;
+
 
 
 // 管理者ログイン
@@ -58,13 +60,9 @@ Route::post('/attendance/break-in', [AttendanceController::class, 'breakIn'])
 Route::post('/attendance/break-out', [AttendanceController::class, 'breakOut'])
     ->name('attendance.breakOut');
 
-
-
-
-
-Route::get('/attendance/list', function () {
-    return view('user.attendance_list');
-})->name('attendance.list');
+//勤怠一覧画面(一般ユーザー)
+Route::get('/attendance/list', [AttendanceListController::class, 'index'])
+    ->name('attendance.list');
 
 Route::get('/attendance/detail/{id}', function () {
     return view('user.attendance_detail');
