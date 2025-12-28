@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
@@ -110,5 +112,28 @@ class AttendanceController extends Controller
         ]);
 
         return back()->with('message', '休憩から戻りました');
+    }
+
+    public function detail($id, Request $request)
+    {
+        if ($id === 'new') {
+            // 勤怠がない日 → 新規作成モード
+            $date = Carbon::parse($request->date);
+
+            return view('user.attendance_detail', [
+                'attendance' => null,
+                'date' => $date,
+                'user' => Auth::user(),
+            ]);
+        }
+
+        // 通常：既存勤怠データ
+        $attendance = Attendance::with('breaks', 'user')->findOrFail($id);
+
+        return view('user.attendance_detail', [
+            'attendance' => $attendance,
+            'date' => $attendance->date,
+            'user' => $attendance->user,
+        ]);
     }
 }

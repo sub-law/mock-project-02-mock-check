@@ -9,7 +9,7 @@ use App\Http\Controllers\User\RegisterController;
 use App\Http\Controllers\User\VerifyEmailController;
 use App\Http\Controllers\User\AttendanceListController;
 use App\Http\Controllers\User\EmailVerificationNotificationController;
-use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\User\AttendanceController;
 
 
 
@@ -64,9 +64,17 @@ Route::post('/attendance/break-out', [AttendanceController::class, 'breakOut'])
 Route::get('/attendance/list', [AttendanceListController::class, 'index'])
     ->name('attendance.list');
 
-Route::get('/attendance/detail/{id}', function () {
-    return view('user.attendance_detail');
-})->name('attendance.detail');
+
+//勤怠詳細画面  
+
+Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])
+    ->name('attendance.detail');
+
+
+
+//Route::get('/attendance/detail/{id}', function () {
+//   return view('user.attendance_detail');
+//})->name('attendance.detail');
 
 // 一般ユーザー用・管理者共通、後程修正
 Route::get('/stamp_correction_request_list', function () {

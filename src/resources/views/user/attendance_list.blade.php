@@ -103,7 +103,13 @@
                     @endif
                 </td>
 
-                <td class="detail-cell">詳細</td>
+                <td class="detail-cell">
+                    <a href="{{ route('attendance.detail', ['id' => $attendance->id ?? 'new', 'date' => $day->format('Y-m-d')]) }}"
+                        class="detail-link">
+                        詳細
+                    </a>
+                </td>
+
             </tr>
             @endforeach
         </tbody>
