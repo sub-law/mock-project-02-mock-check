@@ -59,22 +59,24 @@ body {
 }
 
 .calendar-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 12px;
+    z-index: 20;
+    /* ← input を前面に出すための決定打 */
 }
 
 .month-picker-hidden {
     position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    opacity: 0;
-    cursor: pointer;
+        inset: 0;
+        /* wrapper 全体を覆う */
+        opacity: 0;
+        cursor: pointer;
+        z-index: 30;
+        /* wrapper より前に */
 }
 
 .calendar-icon {

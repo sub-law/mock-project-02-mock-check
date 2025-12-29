@@ -22,19 +22,14 @@
             前月
         </a>
 
-        <div class="calendar-wrapper">
-            <label id="calendarTrigger">
-                <img src="{{ asset('images/calendar.png') }}"
-                    alt="カレンダー"
-                    class="calendar-icon">
-            </label>
-
-            <input type="month" id="monthPicker" class="month-picker-hidden">
-
+        <div class="calendar-wrapper" id="calendarTrigger">
+            <img src="{{ asset('images/calendar.png') }}" class="calendar-icon">
             <span class="calendar-label">{{ $currentMonth->format('Y/m') }}</span>
+            
+            <input type="month" 
+                id="monthPicker" 
+                class="month-picker-hidden">
         </div>
-
-
 
         {{-- 翌月 --}}
         <a href="{{ route('attendance.list', ['month' => $currentMonth->copy()->addMonth()->format('Y-m')]) }}"

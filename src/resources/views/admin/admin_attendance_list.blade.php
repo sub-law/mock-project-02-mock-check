@@ -11,24 +11,35 @@
 
     <div class="attendance-header">
         <div class="attendance-line"></div>
-        <h1 class="attendance-title">{{ now()->format('Y年m月d日') }}の勤怠</h1>
+        <h1 class="attendance-title">{{ $date->format('Y年m月d日') }}の勤怠</h1>
     </div>
 
     <div class="attendance-navigation">
-        <button class="nav-button nav-prev">
-            <img src="{{ asset('images/arrow.png') }}" alt="前日" class="left-icon">
-            前日
-        </button>
 
-        <div class="calendar-wrapper">
-            <img src="{{ asset('images/calendar.png') }}" alt="カレンダー" class="calendar-icon">
-            <span class="calendar-label">{{ now()->format('Y年m月d日') }}</span>
+        {{-- 前日 --}}
+        <a href="{{ route('admin.attendance.list', ['date' => $date->copy()->subDay()->toDateString()]) }}"
+            class="nav-button nav-prev">
+            <img src="{{ asset('images/arrow.png') }}" class="left-icon">
+            前日
+        </a>
+
+        {{-- カレンダー --}}
+        <div class="calendar-wrapper" id="calendarTrigger">
+            <img src="{{ asset('images/calendar.png') }}" class="calendar-icon">
+            <span class="calendar-label">{{ $date->format('Y年m月d日') }}</span>
+
+            <input type="date"
+                id="datePicker"
+                class="date-picker-hidden"
+                value="{{ $date->toDateString() }}">
         </div>
 
-        <button class="nav-button nav-next">
-            <img src="{{ asset('images/arrow.png') }}" alt="翌日" class="right-icon">
+        {{-- 翌日 --}}
+        <a href="{{ route('admin.attendance.list', ['date' => $date->copy()->addDay()->toDateString()]) }}"
+            class="nav-button nav-next">
+            <img src="{{ asset('images/arrow.png') }}" class="right-icon">
             翌日
-        </button>
+        </a>
     </div>
 
     <table class="attendance-table">
@@ -43,27 +54,42 @@
             </tr>
         </thead>
         <tbody>
-            {{-- 仮データ --}}
+            @forelse ($attendances as $attendance)
             <tr>
-                <td>山田太郎</td>
-                <td>09:00</td>
-                <td>18:00</td>
-                <td>1:00</td>
-                <td>8:00</td>
-                <td class="detail-cell">詳細</a></td>
+                <td>{{ $attendance->user->name }}</td>
 
+                <td>{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '-' }}</td>
+                <td>{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '-' }}</td>
+
+                <td>{{ $attendance->breaks->count() > 0 ? '1:00' : '-' }}</td>
+
+                <td>{{ $attendance->clock_in && $attendance->clock_out ? '8:00' : '-' }}</td>
+
+                <td class="detail-cell">
+                    <a href="{{ route('admin.attendance.detail', $attendance->id) }}">詳細</a>
+                </td>
             </tr>
+            @empty
             <tr>
-                <td>西伶奈</td>
-                <td>09:00</td>
-                <td>18:00</td>
-                <td>1:00</td>
-                <td>8:00</td>
-                <td class="detail-cell">詳細</a></td>
-
+                <td colspan="6" class="no-data">データがありません</td>
             </tr>
+            @endforelse
         </tbody>
-    </table>
 
+        <script>
+            // カレンダーアイコン＋日付ラベルをクリックしたら datePicker を開く
+            document.getElementById('calendarTrigger').addEventListener('click', () => {
+                document.getElementById('datePicker').showPicker();
+            });
+
+            // 日付を選んだらその日の勤怠一覧へ遷移
+            document.getElementById('datePicker').addEventListener('change', function() {
+                const date = this.value;
+                const baseUrl = "{{ url('/admin/attendance/list') }}";
+                window.location.href = baseUrl + "?date=" + date;
+            });
+        </script>
+
+    </table>
 </div>
 @endsection
