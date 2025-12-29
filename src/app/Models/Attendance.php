@@ -10,6 +10,12 @@ class Attendance extends Model
 {
     use HasFactory;
 
+    // 勤怠ステータス 
+    const STATUS_NONE = 0; // 勤務外（未出勤） 
+    const STATUS_WORKING = 1; // 出勤中 
+    const STATUS_BREAK = 2; // 休憩中 
+    const STATUS_DONE = 3; // 退勤済み
+
     protected $fillable = [
         'user_id',
         'date',
@@ -20,19 +26,13 @@ class Attendance extends Model
 
     public function getStatusLabel()
     {
-        if (!$this->clock_in) {
-            return '勤務外';
-        }
-
-        if ($this->breaks()->whereNull('break_end')->exists()) {
-            return '休憩中';
-        }
-
-        if (!$this->clock_out) {
-            return '出勤中';
-        }
-
-        return '退勤済';
+        return match ($this->status) {
+            self::STATUS_NONE => '勤務外',
+            self::STATUS_WORKING => '出勤中',
+            self::STATUS_BREAK => '休憩中',
+            self::STATUS_DONE => '退勤済',
+            default => '不明',
+        };
     }
 
     public function getTotalBreakMinutes()
@@ -83,5 +83,10 @@ class Attendance extends Model
     public function stampCorrectionRequests()
     {
         return $this->hasMany(StampCorrectionRequest::class);
+    }
+
+    public function correction_request()
+    {
+        return $this->hasOne(StampCorrectionRequest::class)->latestOfMany();
     }
 }

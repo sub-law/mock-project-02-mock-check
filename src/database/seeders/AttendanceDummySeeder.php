@@ -26,7 +26,21 @@ class AttendanceDummySeeder extends Seeder
             foreach ($months as $monthStart) {
 
                 $date = $monthStart->copy();
-                $monthEnd = $monthStart->copy()->endOfMonth();
+
+                if ($monthStart->isSameMonth(Carbon::now())) {
+
+                    $yesterday = Carbon::now()->subDay();
+
+                    // 昨日が月初より前 → 当月はまだデータなし
+                    if ($yesterday->lt($monthStart)) {
+                        continue;
+                    }
+
+                    $monthEnd = $yesterday;
+                } else {
+                    $monthEnd = $monthStart->copy()->endOfMonth();
+                }
+
 
                 // 西 伶奈の特別処理
                 $isReina = $user->email === 'reina.n@coachtech.com';
@@ -53,15 +67,21 @@ class AttendanceDummySeeder extends Seeder
                     }
 
                     // 勤怠データ作成（基本形）
-                    $attendance = Attendance::create([
-                        'user_id'   => $user->id,
-                        'date'      => $date->toDateString(),
-                        'clock_in'  => $date->copy()->setTime(9, 0),
-                        'clock_out' => $date->isSameDay($noClockOutDay) && $isReina
-                            ? null
-                            : $date->copy()->setTime(18, 0),
-                        'status'    => 2,
-                    ]);
+                    $attendance = Attendance::firstOrCreate(
+                        [
+                            'user_id' => $user->id,
+                            'date'    => $date->toDateString(),
+                        ],
+                        [
+                            'clock_in'  => $date->copy()->setTime(9, 0),
+                            'clock_out' => ($isReina && $date->isSameDay($noClockOutDay))
+                                ? null
+                                : $date->copy()->setTime(18, 0),
+                            'status'    => Attendance::STATUS_DONE,
+                        ]
+                    );
+
+
 
                     // ① 西 伶奈：休憩なしの日
                     if ($isReina && $date->isSameDay($noBreakDay)) {
@@ -71,11 +91,13 @@ class AttendanceDummySeeder extends Seeder
 
                     // ③ 西 伶奈：休憩終了なしの日
                     if ($isReina && $date->isSameDay($breakNotEndDay)) {
-                        BreakTime::create([
-                            'attendance_id' => $attendance->id,
-                            'break_start'   => $date->copy()->setTime(12, 0),
-                            'break_end'     => null, // 終了なし
-                        ]);
+                        BreakTime::firstOrCreate(
+                            [
+                                'attendance_id' => $attendance->id,
+                                'break_start'   => $date->copy()->setTime(12, 0),
+                                'break_end'     => null,
+                            ]
+                        );
                         $date->addDay();
                         continue;
                     }
@@ -84,29 +106,23 @@ class AttendanceDummySeeder extends Seeder
                     if ($isReina && $date->isSameDay($twoBreakDay)) {
 
                         // 1回目：12:00〜12:45
-                        BreakTime::create([
-                            'attendance_id' => $attendance->id,
-                            'break_start'   => $date->copy()->setTime(12, 0),
-                            'break_end'     => $date->copy()->setTime(12, 45),
-                        ]);
+                        BreakTime::firstOrCreate(['attendance_id' => $attendance->id, 'break_start' => $date->copy()->setTime(12, 0), 'break_end' => $date->copy()->setTime(12, 45),]);
 
                         // 2回目：15:00〜15:45
-                        BreakTime::create([
-                            'attendance_id' => $attendance->id,
-                            'break_start'   => $date->copy()->setTime(15, 0),
-                            'break_end'     => $date->copy()->setTime(15, 45),
-                        ]);
+                        BreakTime::firstOrCreate(['attendance_id' => $attendance->id, 'break_start' => $date->copy()->setTime(15, 0), 'break_end' => $date->copy()->setTime(15, 45),]);
 
                         $date->addDay();
                         continue;
                     }
 
                     // 通常休憩（12:00〜13:00）
-                    BreakTime::create([
-                        'attendance_id' => $attendance->id,
-                        'break_start'   => $date->copy()->setTime(12, 0),
-                        'break_end'     => $date->copy()->setTime(13, 0),
-                    ]);
+                    BreakTime::firstOrCreate(
+                        [
+                            'attendance_id' => $attendance->id,
+                            'break_start'   => $date->copy()->setTime(12, 0),
+                            'break_end'     => $date->copy()->setTime(13, 0),
+                        ]
+                    );
 
                     $date->addDay();
                 }

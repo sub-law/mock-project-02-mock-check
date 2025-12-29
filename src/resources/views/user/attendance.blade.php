@@ -29,26 +29,15 @@
     <div class="attendance-actions">
 
         {{-- 出勤前 --}}
-        @if (!$attendance)
+        @if (!$attendance || $attendance->status === \App\Models\Attendance::STATUS_NONE)
 
         <form method="POST" action="{{ route('attendance.clockIn') }}">
             @csrf
             <button type="submit" class="attendance-button start-button">出勤</button>
         </form>
 
-        {{-- 出勤後（退勤前） --}}
-        @elseif (!$attendance->clock_out)
-
-        {{-- ★ 休憩中 --}}
-        @if ($activeBreak)
-
-        <form method="POST" action="{{ route('attendance.breakOut') }}">
-            @csrf
-            <button type="submit" class="attendance-button break-button">休憩戻</button>
-        </form>
-
-        {{-- ★ 通常勤務中（休憩入＋退勤） --}}
-        @else
+        {{-- 出勤中 --}}
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_WORKING)
 
         <div class="attendance-buttons-row">
             <form method="POST" action="{{ route('attendance.clockOut') }}">
@@ -62,14 +51,21 @@
             </form>
         </div>
 
-        @endif
+        {{-- 休憩中 --}}
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_BREAK)
+
+        <form method="POST" action="{{ route('attendance.breakOut') }}">
+            @csrf
+            <button type="submit" class="attendance-button break-button">休憩戻</button>
+        </form>
 
         {{-- 退勤後 --}}
-        @else
+        @elseif ($attendance->status === \App\Models\Attendance::STATUS_DONE)
 
         <p class="attendance-message">お疲れ様でした</p>
 
         @endif
+
 
     </div>
 

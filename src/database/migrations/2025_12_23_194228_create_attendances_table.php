@@ -16,13 +16,13 @@ class CreateAttendancesTable extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id(); // PK, bigint, NOT NULL
 
-            $table->unsignedBigInteger('user_id'); // FK, NOT NULL
-            $table->date('date'); // NOT NULL
+            $table->unsignedBigInteger('user_id')->index(); // FK, NOT NULL
+            $table->date('date')->index(); // NOT NULL
 
             $table->dateTime('clock_in')->nullable(); // NULL 許可
             $table->dateTime('clock_out')->nullable(); // NULL 許可
 
-            $table->tinyInteger('status'); // NOT NULL
+            $table->tinyInteger('status')->comment('0:勤務外,1:出勤中,2:休憩中,3:退勤済'); // NOT NULL
 
             $table->timestamps(); // created_at, updated_at（どちらも NOT NULL）
 

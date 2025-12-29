@@ -205,3 +205,35 @@ body {
     font-size: 18px;
     color: #FF0000;
 }
+
+.pending-message {
+    font-family: Inter;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0.15em;
+    color:  #FF0000;;
+    margin-top: 20px;
+}
+
+.success-message {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #e0f7fa;
+    color: #00796b;
+    border: 1px solid #b2ebf2;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.input-field-time[disabled],
+.input-field-textarea[disabled],
+.input-field-break-time[disabled] {
+    border: none;
+    background: transparent;
+    background-color: #fff;
+    color: #000;
+    padding-left: 0;
+    pointer-events: none;
+}

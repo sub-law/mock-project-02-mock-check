@@ -15,6 +15,11 @@ class StampCorrectionRequestBreak extends Model
         'break_end',
     ];
 
+    protected $casts = [
+        'break_start' => 'datetime',
+        'break_end' => 'datetime',
+    ];
+
     /**
      * StampCorrectionRequestBreak（多）- StampCorrectionRequest（1）
      */

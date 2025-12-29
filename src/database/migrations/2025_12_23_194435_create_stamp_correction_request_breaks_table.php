@@ -16,20 +16,18 @@ class CreateStampCorrectionRequestBreaksTable extends Migration
         Schema::create('stamp_correction_request_breaks', function (Blueprint $table) {
             $table->id(); // PK, bigint, NOT NULL
 
-            $table->unsignedBigInteger('stamp_correction_request_id'); // FK, NOT NULL
+            $table->unsignedBigInteger('stamp_correction_request_id');
 
-            $table->dateTime('break_start'); // NOT NULL
-            $table->dateTime('break_end');   // NOT NULL
+            $table->dateTime('break_start')->comment('休憩開始');
 
-            $table->timestamps(); // created_at, updated_at（どちらも NOT NULL）
+            $table->dateTime('break_end')->nullable()->comment('休憩終了（null = 終了していない）');
 
-            // FOREIGN KEY
+            $table->timestamps();
+            
             $table->foreign('stamp_correction_request_id', 'scrb_scr_id_fk')
-                ->references('id')
-                ->on('stamp_correction_requests')
-                ->onDelete('cascade');
-
-            // ※ cascade は要件に応じて調整可能
+            ->references('id')
+            ->on('stamp_correction_requests')
+            ->onDelete('cascade');
         });
     }
 

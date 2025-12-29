@@ -16,7 +16,7 @@ class CreateBreaksTable extends Migration
         Schema::create('breaks', function (Blueprint $table) {
             $table->id(); // PK
 
-            $table->unsignedBigInteger('attendance_id'); // FK
+            $table->unsignedBigInteger('attendance_id')->index(); // FK
 
             $table->dateTime('break_start'); // 休憩開始（必須）
             $table->dateTime('break_end')->nullable(); // ★ 休憩終了（休憩中は null）

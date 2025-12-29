@@ -16,8 +16,10 @@ class CreateStampCorrectionRequestsTable extends Migration
         Schema::create('stamp_correction_requests', function (Blueprint $table) {
             $table->id(); // PK, bigint, NOT NULL
 
-            $table->unsignedBigInteger('user_id');        // FK, NOT NULL
-            $table->unsignedBigInteger('attendance_id');  // FK, NOT NULL
+            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('attendance_id')->nullable()->index();
+
+            $table->date('date'); // NOT NULL
 
             $table->dateTime('requested_clock_in');   // NOT NULL
             $table->dateTime('requested_clock_out');  // NOT NULL

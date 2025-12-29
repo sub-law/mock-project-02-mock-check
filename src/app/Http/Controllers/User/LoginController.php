@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,8 +18,7 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-
-        $credentials['role'] = 0;
+        $credentials['role'] = User::ROLE_USER;
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();

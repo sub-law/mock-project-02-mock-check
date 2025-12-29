@@ -10,7 +10,7 @@ use App\Http\Controllers\User\VerifyEmailController;
 use App\Http\Controllers\User\AttendanceListController;
 use App\Http\Controllers\User\EmailVerificationNotificationController;
 use App\Http\Controllers\User\AttendanceController;
-
+use App\Http\Controllers\StampCorrectionRequestController;
 
 
 // 管理者ログイン
@@ -64,17 +64,20 @@ Route::post('/attendance/break-out', [AttendanceController::class, 'breakOut'])
 Route::get('/attendance/list', [AttendanceListController::class, 'index'])
     ->name('attendance.list');
 
-
 //勤怠詳細画面  
-
 Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])
     ->name('attendance.detail');
 
+//勤怠修正申告処理
+Route::post(
+    '/attendance/{attendanceId}/correction',
+    [StampCorrectionRequestController::class, 'store']
+)->name('correction.store');
 
 
-//Route::get('/attendance/detail/{id}', function () {
-//   return view('user.attendance_detail');
-//})->name('attendance.detail');
+
+
+
 
 // 一般ユーザー用・管理者共通、後程修正
 Route::get('/stamp_correction_request_list', function () {
