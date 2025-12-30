@@ -25,7 +25,7 @@ class CreateStampCorrectionRequestsTable extends Migration
             $table->dateTime('requested_clock_out');  // NOT NULL
 
             $table->string('note'); // NOT NULL
-            $table->tinyInteger('status'); // NOT NULL
+            $table->tinyInteger('status')->default(0); // NOT NULL
 
             $table->string('admin_comment')->nullable(); // NULL 許可
 
