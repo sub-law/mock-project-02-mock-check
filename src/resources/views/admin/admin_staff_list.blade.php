@@ -23,17 +23,23 @@
             </tr>
         </thead>
         <tbody>
-            {{-- 仮データ --}}
+            @forelse ($users as $user)
             <tr>
-                <td>西 伶奈</td>
-                <td>reina.n@coachtech.com</td>
-                <td class="detail-cell">詳細</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+
+                <td class="detail-cell">
+                    <a href="{{ route('admin.staff.attendance', ['id' => $user->id]) }}">
+                        詳細
+                    </a>
+                </td>
+
             </tr>
+            @empty
             <tr>
-                <td>山田 太郎</td>
-                <td>taro.y@coachtech.com</td>
-                <td class="detail-cell">詳細</td>
+                <td colspan="3" class="no-data">スタッフが登録されていません</td>
             </tr>
+            @endforelse
         </tbody>
     </table>
 

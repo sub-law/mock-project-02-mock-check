@@ -24,6 +24,8 @@ class CreateAttendancesTable extends Migration
 
             $table->tinyInteger('status')->comment('0:勤務外,1:出勤中,2:休憩中,3:退勤済'); // NOT NULL
 
+            $table->string('note')->nullable();
+
             $table->timestamps(); // created_at, updated_at（どちらも NOT NULL）
 
             // UNIQUE KEY (user_id, date)

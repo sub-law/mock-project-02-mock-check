@@ -56,7 +56,8 @@
         <tbody>
             @forelse ($attendances as $attendance)
             <tr>
-                <td>{{ $attendance->user->name }}</td>
+                <td>{{ optional($attendance->user)->name }}
+                </td>
 
                 <td>{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '-' }}</td>
                 <td>{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '-' }}</td>
