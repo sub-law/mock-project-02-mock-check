@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\User;
+use App\Models\BreakTime;
 use Carbon\Carbon;
 
 class AdminAttendanceController extends Controller
@@ -34,27 +35,38 @@ class AdminAttendanceController extends Controller
         ]);
     }
 
-    public function detail($id)
+    public function detail($id, Request $request)
     {
-        // 勤怠データを取得（存在しない場合は null）
+        $date = $request->query('date')
+            ? Carbon::parse($request->query('date'))
+            : Carbon::today();
+
         $attendance = Attendance::with(['user', 'breaks'])->find($id);
 
-        // 勤怠が存在しない場合は空の Attendance を作成
         if (!$attendance) {
             $attendance = new Attendance([
-                'date' => now()->toDateString(),
+                'date' => $date,
             ]);
-            $attendance->setRelation('user', null); // 必要に応じて
+            $attendance->setRelation('user', null);
             $attendance->setRelation('breaks', collect());
         }
 
-        // 休憩が0件なら空の1件を補完
-        if ($attendance->breaks->isEmpty()) {
-            $attendance->setRelation('breaks', collect([new \App\Models\BreakTime]));
-        }
+        // ★ 既存の休憩 + 空1件を必ず渡す
+        $breaks = $attendance->breaks->isEmpty()
+            ? collect()
+            : $attendance->breaks;
+
+        $breaks->push(new \App\Models\BreakTime([
+            'break_start' => null,
+            'break_end' => null,
+        ]));
+
+        $attendance->setRelation('breaks', $breaks);
 
         return view('admin.attendance_detail', compact('attendance'));
     }
+
+
 
     public function staffAttendance(Request $request, $userId)
     {
