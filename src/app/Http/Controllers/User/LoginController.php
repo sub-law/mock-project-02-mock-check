@@ -18,9 +18,8 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $credentials['role'] = User::ROLE_USER;
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('attendance.index');
         }
@@ -32,7 +31,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
         return redirect('/login')->with('status', 'ログアウトしました');
     }
 }

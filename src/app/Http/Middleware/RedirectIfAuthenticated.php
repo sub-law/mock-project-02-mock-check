@@ -22,8 +22,29 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+
+            // 管理者ログイン済みなら管理者トップへ
+            if ($guard === 'admin' && Auth::guard('admin')->check()) {
+                return redirect()->route('admin.attendance.list');
+            }
+
+            // 一般ユーザーログイン済みなら一般ユーザートップへ
+            if ($guard === 'web' && Auth::guard('web')->check()) {
+                return redirect()->route('attendance.index');
+            }
+
+            // guard が null の場合（guest のみ指定された場合）
+            if ($guard === null) {
+
+                // 管理者ログイン済み
+                if (Auth::guard('admin')->check()) {
+                    return redirect()->route('admin.attendance.list');
+                }
+
+                // 一般ユーザーログイン済み
+                if (Auth::guard('web')->check()) {
+                    return redirect()->route('attendance.index');
+                }
             }
         }
 

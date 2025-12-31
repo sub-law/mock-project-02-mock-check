@@ -18,9 +18,8 @@ class AdminLoginController extends Controller
     {
         $credentials = $request->validated();
 
-        $credentials['role'] = 1;
-
-        if (Auth::attempt($credentials)) {
+        // ★ 管理者用 guard を使う
+        if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('admin.attendance.list');
         }
@@ -32,7 +31,9 @@ class AdminLoginController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        // ★ 管理者用 guard をログアウト
+        Auth::guard('admin')->logout();
+
         return redirect('/admin/login')->with('status', 'ログアウトしました');
     }
 }

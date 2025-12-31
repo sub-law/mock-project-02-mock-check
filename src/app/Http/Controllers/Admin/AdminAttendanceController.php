@@ -56,10 +56,11 @@ class AdminAttendanceController extends Controller
             ? collect()
             : $attendance->breaks;
 
-        $breaks->push(new \App\Models\BreakTime([
+        $breaks->push(new BreakTime([
             'break_start' => null,
             'break_end' => null,
         ]));
+
 
         $attendance->setRelation('breaks', $breaks);
 

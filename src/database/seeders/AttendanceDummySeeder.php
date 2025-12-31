@@ -13,7 +13,7 @@ class AttendanceDummySeeder extends Seeder
     public function run()
     {
         // 一般ユーザーのみ
-        $users = User::where('role', 0)->get();
+        $users = User::all();
 
         foreach ($users as $user) {
 
