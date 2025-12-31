@@ -30,6 +30,19 @@ php artisan cache:clear
 
 PHPコンテナから出る　Ctrl+D
 
+## ログインについての重要な注意
+ブラウザは セッションIDを1つしか保持できないため、
+同一ブラウザで複数アカウント（一般ユーザー・管理者）を同時にログイン状態で操作することはできません。
+
+整合性確認を行う場合は以下のいずれかを使用してください：
+別ブラウザ（例：Chrome と Edge）
+
+通常ウィンドウとシークレットウィンドウ
+
+ブラウザの別プロファイル
+
+これは Laravel の仕様ではなく、Web ブラウザのセッション管理による制約です。
+
 ### ダミーデータユーザー情報（管理者1名、一般ユーザー6名）
 
 ## 1
@@ -52,8 +65,9 @@ password  password123
 
 ## 4
 name  増田　一世
-email  issei.m@coachtech.comメール認証済み
-
+email  issei.m@coachtech.com
+password  password123
+メール認証済み
 ## 5
 name  山本　敬吉
 email  keikichi.y@coachtech.com
@@ -62,9 +76,7 @@ password  password123
 
 ## 6
 name  秋田　朋美
-email  tomomi.a@coach
-password  password123
-tech.com
+email  tomomi.a@coachtech.com
 password  password123
 メール認証済み
 

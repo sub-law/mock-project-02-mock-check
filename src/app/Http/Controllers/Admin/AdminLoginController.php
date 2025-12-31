@@ -29,10 +29,12 @@ class AdminLoginController extends Controller
         ]);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        // ★ 管理者用 guard をログアウト
         Auth::guard('admin')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/admin/login')->with('status', 'ログアウトしました');
     }
