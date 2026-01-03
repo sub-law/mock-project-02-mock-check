@@ -139,7 +139,7 @@ class AttendanceController extends Controller
 
             return view('user.attendance_detail', [
                 'attendance' => null,
-                'correction_request' => $cr,
+                'correctionRequest' => $cr,
                 'breaks' => $breaks,
                 'date' => $date,
                 'user' => Auth::user(),
@@ -153,13 +153,13 @@ class AttendanceController extends Controller
         $attendance = Attendance::with([
             'breaks',
             'user',
-            'correction_request' => fn($q) => $q->latest(),
-            'correction_request.breaks'
+            'correctionRequest' => fn($q) => $q->latest(),
+            'correctionRequest.breaks'
         ])
             ->where('user_id', $userId)
             ->findOrFail($id);
 
-        $cr = $attendance->correction_request;
+        $cr = $attendance->correctionRequest;
 
         // 修正申請の休憩があれば優先、なければ勤怠の休憩
         $breaks = ($cr && $cr->breaks->count() > 0)
@@ -174,7 +174,7 @@ class AttendanceController extends Controller
 
         return view('user.attendance_detail', [
             'attendance' => $attendance,
-            'correction_request' => $cr,
+            'correctionRequest' => $cr,
             'breaks' => $breaks,
             'date' => $attendance->date,
             'user' => $attendance->user,

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\User;
 use App\Models\BreakTime;
+use App\Models\StampCorrectionRequest;
 use Carbon\Carbon;
 
 class AdminAttendanceController extends Controller
@@ -37,36 +38,55 @@ class AdminAttendanceController extends Controller
 
     public function detail($id, Request $request)
     {
+        // 日付
         $date = $request->query('date')
             ? Carbon::parse($request->query('date'))
             : Carbon::today();
 
-        $attendance = Attendance::with(['user', 'breaks'])->find($id);
+        // 勤怠データ取得
+        $attendance = Attendance::with(['user', 'breaks', 'correctionRequest'])->find($id);
 
+        // 勤怠が存在しない場合（新規）
         if (!$attendance) {
-            $attendance = new Attendance([
-                'date' => $date,
-            ]);
+            $attendance = new Attendance(['date' => $date]);
             $attendance->setRelation('user', null);
             $attendance->setRelation('breaks', collect());
+            $attendance->setRelation('correctionRequest', null);
         }
 
-        // ★ 既存の休憩 + 空1件を必ず渡す
-        $breaks = $attendance->breaks->isEmpty()
-            ? collect()
+        // 修正申請
+        $correctionRequest = $attendance->correctionRequest;
+
+        // 承認待ちかどうか
+        $isPending = $correctionRequest && $correctionRequest->status === StampCorrectionRequest::STATUS_PENDING;
+
+        // 出勤・退勤（修正申請優先）
+        $clockIn = $correctionRequest && $correctionRequest->requested_clock_in
+            ? $correctionRequest->requested_clock_in
+            : $attendance->clock_in;
+
+        $clockOut = $correctionRequest && $correctionRequest->requested_clock_out
+            ? $correctionRequest->requested_clock_out
+            : $attendance->clock_out;
+
+        // 休憩（修正申請優先）
+        $breaks = ($correctionRequest && $correctionRequest->breaks->count() > 0)
+            ? $correctionRequest->breaks
             : $attendance->breaks;
 
-        $breaks->push(new BreakTime([
-            'break_start' => null,
-            'break_end' => null,
-        ]));
+        // 空行を1つ追加
+        $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
+        $breaks->push(new BreakTime(['break_start' => null, 'break_end' => null]));
 
-
-        $attendance->setRelation('breaks', $breaks);
-
-        return view('admin.attendance_detail', compact('attendance'));
+        return view('admin.attendance_detail', [
+            'attendance' => $attendance,
+            'correctionRequest' => $correctionRequest,
+            'clockIn' => $clockIn,
+            'clockOut' => $clockOut,
+            'breaks' => $breaks,
+            'isPending' => $isPending,
+        ]);
     }
-
 
 
     public function staffAttendance(Request $request, $userId)

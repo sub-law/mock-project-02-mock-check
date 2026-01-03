@@ -36,7 +36,8 @@ header img {
     height: 36px;
 }
 
-.admin-nav ul {
+.nav-menu ul
+ {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -45,8 +46,8 @@ header img {
     gap: 40px;
 }
 
-
-.admin-nav a {
+.nav-menu a 
+{
     display: inline-block;
     width: auto;
     height: 29px;
@@ -59,7 +60,8 @@ header img {
     text-align: center;
 }
 
-.admin-nav button {
+.nav-menu button
+{
     display: inline-block;
     width: auto;
     height: 29px;

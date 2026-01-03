@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', '申請一覧画面')
 
@@ -35,7 +35,7 @@
                 <td>承認待ち</td>
                 <td>西伶奈</td>
                 <td>2025/12/01</td>
-                <td>遅延のため</td>
+                <td>管理者側画面</td>
                 <td>2025/12/02</td>
                 <td class="request-detail-cell">詳細</td>
             </tr>
@@ -43,7 +43,7 @@
                 <td>承認待ち</td>
                 <td>西伶奈</td>
                 <td>2025/12/03</td>
-                <td>体調不良</td>
+                <td>管理者側画面</td>
                 <td>2025/12/04</td>
                 <td class="request-detail-cell">詳細</td>
             </tr>

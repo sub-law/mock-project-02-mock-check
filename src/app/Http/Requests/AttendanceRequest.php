@@ -32,13 +32,16 @@ class AttendanceRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-            // 出勤・退勤の形式チェック
+            // 出勤・退勤の形式チェック（return しない）
             if (!$this->isValidTime($this->clock_in)) {
                 $validator->errors()->add('clock_in', '出勤時間もしくは退勤時間が不適切な値です');
-                return;
             }
             if (!$this->isValidTime($this->clock_out)) {
                 $validator->errors()->add('clock_out', '出勤時間もしくは退勤時間が不適切な値です');
+            }
+
+            // clock_in / clock_out が不正なら後続チェックはスキップ
+            if ($validator->errors()->has('clock_in') || $validator->errors()->has('clock_out')) {
                 return;
             }
 
@@ -58,7 +61,7 @@ class AttendanceRequest extends FormRequest
 
                 $end = $ends[$i] ?? null;
 
-                // 形式チェック（片側だけ入力されている場合もここで拾える）
+                // 形式チェック
                 if ($start && !$this->isValidTime($start)) {
                     $validator->errors()->add("break_start.$i", '休憩時間が不適切な値です');
                     continue;
@@ -71,32 +74,53 @@ class AttendanceRequest extends FormRequest
                 $startTime = $start ? Carbon::createFromFormat('H:i', $start) : null;
                 $endTime   = $end   ? Carbon::createFromFormat('H:i', $end)   : null;
 
-                // 両方入力されている場合のみチェック
                 if ($startTime && $endTime) {
 
-                    // 開始 < 出勤
-                    if ($startTime->lt($clockIn)) {
+                    // 出勤〜退勤の範囲チェック
+                    if ($startTime->lt($clockIn) || $startTime->gt($clockOut)) {
                         $validator->errors()->add("break_start.$i", '休憩時間が不適切な値です');
                     }
 
-                    // 開始 > 退勤
-                    if ($startTime->gt($clockOut)) {
-                        $validator->errors()->add("break_start.$i", '休憩時間が不適切な値です');
-                    }
-
-                    // 終了 > 退勤
-                    if ($endTime->gt($clockOut)) {
-                        $validator->errors()->add("break_end.$i", '休憩時間が不適切な値です');
-                    }
-
-                    // 終了 < 出勤
-                    if ($endTime->lt($clockIn)) {
+                    if ($endTime->lt($clockIn) || $endTime->gt($clockOut)) {
                         $validator->errors()->add("break_end.$i", '休憩時間が不適切な値です');
                     }
 
                     // 開始 >= 終了
                     if ($startTime->gte($endTime)) {
                         $validator->errors()->add("break_end.$i", '休憩時間が不適切な値です');
+                    }
+                }
+            }
+
+            // ★ 休憩同士の重複チェック
+            $breakRanges = [];
+
+            foreach ($starts as $i => $start) {
+                $end = $ends[$i] ?? null;
+
+                if ($start && $end) {
+                    $breakRanges[] = [
+                        'index' => $i,
+                        'start' => Carbon::createFromFormat('H:i', $start),
+                        'end'   => Carbon::createFromFormat('H:i', $end),
+                    ];
+                }
+            }
+
+            for ($i = 0; $i < count($breakRanges); $i++) {
+                for ($j = $i + 1; $j < count($breakRanges); $j++) {
+
+                    $a = $breakRanges[$i];
+                    $b = $breakRanges[$j];
+
+                    // 重複判定：A.start < B.end && A.end > B.start
+                    if ($a['start']->lt($b['end']) && $a['end']->gt($b['start'])) {
+
+                        $validator->errors()->add("break_start.{$a['index']}", '休憩時間が他の休憩と重複しています');
+                        $validator->errors()->add("break_end.{$a['index']}",   '休憩時間が他の休憩と重複しています');
+
+                        $validator->errors()->add("break_start.{$b['index']}", '休憩時間が他の休憩と重複しています');
+                        $validator->errors()->add("break_end.{$b['index']}",   '休憩時間が他の休憩と重複しています');
                     }
                 }
             }
@@ -108,13 +132,7 @@ class AttendanceRequest extends FormRequest
      */
     private function isValidTime($value)
     {
-        // 完全一致（例: 12:34）
-        if (preg_match('/^\d{2}:\d{2}$/', $value)) {
-            return true;
-        }
-
-        // 不完全な値（例: 12:）は false
-        return false;
+        return preg_match('/^\d{2}:\d{2}$/', $value);
     }
 
     public function messages()

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminAttendanceController;
 use App\Http\Controllers\Admin\AdminStaffController;
+use App\Http\Controllers\Admin\AdminStampCorrectionRequestListController;
 
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\RegisterController;
@@ -13,9 +14,7 @@ use App\Http\Controllers\User\AttendanceListController;
 use App\Http\Controllers\User\EmailVerificationNotificationController;
 use App\Http\Controllers\User\AttendanceController;
 use App\Http\Controllers\User\StampCorrectionRequestController;
-
-use App\Http\Controllers\Common\StampCorrectionRequestListController;
-
+use App\Http\Controllers\User\UserStampCorrectionRequestListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +32,8 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ログイン後（web guard）
-Route::middleware('auth:web')->group(function () {
+Route::middleware('auth:web')->group(function () 
+{
 
     // メール認証
     Route::get('/email/verify', fn() => view('user.verify'))
@@ -60,6 +60,8 @@ Route::middleware('auth:web')->group(function () {
     // 修正申請（store）
     Route::post('/attendance/{attendanceId}/correction', [StampCorrectionRequestController::class, 'store'])
         ->name('correction.store');
+
+    Route::get('/stamp_correction_request_list', [UserStampCorrectionRequestListController::class, 'index'])->name('stamp.correction.request.list');
 });
 
 
@@ -75,8 +77,8 @@ Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin
 Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
 // 管理者ログイン後
-Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
-
+Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () 
+{
     Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])
         ->name('attendance.list');
 
@@ -89,26 +91,16 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'staffAttendance'])
         ->name('staff.attendance');
 
-    // 承認処理は後で実装
-    // Route::get('/stamp_correction_request/approve/{id}', ...)
+    Route::get(
+        '/stamp_correction_request_list',
+        [AdminStampCorrectionRequestListController::class, 'index']
+    )->name('stamp.correction.request.list');
+
+
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| 一般ユーザー & 管理者 共通ルート
-|--------------------------------------------------------------------------
-*/
+    // 承認処理は後で実装
+    // Route::get('/stamp_correction_request/approve/{id}', ...)
+//});
 
-// 修正申請一覧（Common コントローラー）
-//Route::get(
-//    '/stamp_correction_request_list',
-//    [StampCorrectionRequestListController::class, 'index']
-//)->middleware('auth')   // ← これが最適解
-//    ->name('stamp.correction.request.list');
-
-Route::get(
-    '/stamp_correction_request_list',
-    [StampCorrectionRequestListController::class, 'index']
-)->middleware('auth:admin,web')
-    ->name('stamp.correction.request.list');

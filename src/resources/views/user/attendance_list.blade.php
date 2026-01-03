@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('title', '勤怠一覧画面')
 
@@ -25,9 +25,9 @@
         <div class="calendar-wrapper" id="calendarTrigger">
             <img src="{{ asset('images/calendar.png') }}" class="calendar-icon">
             <span class="calendar-label">{{ $currentMonth->format('Y/m') }}</span>
-            
-            <input type="month" 
-                id="monthPicker" 
+
+            <input type="month"
+                id="monthPicker"
                 class="month-picker-hidden">
         </div>
 

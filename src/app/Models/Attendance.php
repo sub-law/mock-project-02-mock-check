@@ -86,8 +86,9 @@ class Attendance extends Model
         return $this->hasMany(StampCorrectionRequest::class);
     }
 
-    public function correction_request()
+    public function correctionRequest()
     {
         return $this->hasOne(StampCorrectionRequest::class)->latestOfMany();
     }
+
 }

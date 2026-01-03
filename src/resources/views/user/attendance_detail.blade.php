@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('title', '勤怠詳細画面')
 
@@ -18,7 +18,7 @@
 
     {{-- 新規申告時のみ日付を hidden で送る --}}
     @if (!$attendance)
-        <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
+    <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
     @endif
 
     <div class="attendance-header">
@@ -45,7 +45,7 @@
                     </td>
                 </tr>
 
-                {{-- 出勤・退勤（申請内容優先 + old 対応） --}}
+                {{-- 出勤・退勤 --}}
                 <tr>
                     <th>出勤・退勤</th>
                     <td class="time-cell">
@@ -83,92 +83,92 @@
 
                         {{-- エラー表示 --}}
                         <div class="error-wrapper">
-                            @error('clock_in')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                            @error('clock_out')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
+                            @if ($errors->has('clock_in'))
+                            <span class="error-message">{{ $errors->first('clock_in') }}</span>
+                            @elseif ($errors->has('clock_out'))
+                            <span class="error-message">{{ $errors->first('clock_out') }}</span>
+                            @endif
                         </div>
                     </td>
                 </tr>
 
-                {{-- 休憩（修正申請があればそちらを優先） --}}
+                {{-- 休憩（既存行） --}}
                 @foreach ($breaks as $index => $break)
-                    <tr>
-                        <th>休憩{{ $index + 1 }}</th>
-                        <td class="time-cell">
-                            <div class="time-wrapper">
+                <tr>
+                    <th>休憩{{ $index + 1 }}</th>
+                    <td class="time-cell">
+                        <div class="time-wrapper">
 
-                                <input
-                                    type="time"
-                                    step="60"
-                                    name="break_start[]"
-                                    class="input-field-time"
-                                    value="{{ old("break_start.$index", optional($break->break_start)->format('H:i')) }}"
-                                    @if ($isPending) disabled @endif>
+                            <input
+                                type="time"
+                                step="60"
+                                name="break_start[]"
+                                class="input-field-time"
+                                value="{{ old("break_start.$index", optional($break->break_start)->format('H:i')) }}"
+                                @if ($isPending) disabled @endif>
 
-                                <span class="time-separator">～</span>
+                            <span class="time-separator">～</span>
 
-                                <input
-                                    type="time"
-                                    step="60"
-                                    name="break_end[]"
-                                    class="input-field-time"
-                                    value="{{ old("break_end.$index", optional($break->break_end)->format('H:i')) }}"
-                                    @if ($isPending) disabled @endif>
+                            <input
+                                type="time"
+                                step="60"
+                                name="break_end[]"
+                                class="input-field-time"
+                                value="{{ old("break_end.$index", optional($break->break_end)->format('H:i')) }}"
+                                @if ($isPending) disabled @endif>
 
-                            </div>
+                        </div>
 
-                            <div class="error-wrapper">
-                                @error("break_start.$index")
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                                @error("break_end.$index")
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </td>
-                    </tr>
+                        {{-- エラー表示（最適化済み） --}}
+                        <div class="error-wrapper">
+                            @if ($errors->has("break_start.$index"))
+                            <span class="error-message">{{ $errors->first("break_start.$index") }}</span>
+                            @elseif ($errors->has("break_end.$index"))
+                            <span class="error-message">{{ $errors->first("break_end.$index") }}</span>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
                 @endforeach
 
-                {{-- 新規休憩行（申請前 or old() がある場合のみ表示） --}}
+                {{-- 新規休憩行 --}}
                 @php $nextIndex = $breaks->count(); @endphp
 
                 @if (!$isPending || old("break_start.$nextIndex") || old("break_end.$nextIndex"))
-                    <tr>
-                        <th>休憩{{ $nextIndex + 1 }}</th>
-                        <td class="time-cell">
-                            <div class="time-wrapper">
+                <tr>
+                    <th>休憩{{ $nextIndex + 1 }}</th>
+                    <td class="time-cell">
+                        <div class="time-wrapper">
 
-                                <input
-                                    type="time"
-                                    step="60"
-                                    name="break_start[]"
-                                    class="input-field-time"
-                                    value="{{ old("break_start.$nextIndex") }}">
+                            <input
+                                type="time"
+                                step="60"
+                                name="break_start[]"
+                                class="input-field-time"
+                                value="{{ old("break_start.$nextIndex") }}">
 
-                                <span class="time-separator">～</span>
+                            <span class="time-separator">～</span>
 
-                                <input
-                                    type="time"
-                                    step="60"
-                                    name="break_end[]"
-                                    class="input-field-time"
-                                    value="{{ old("break_end.$nextIndex") }}">
+                            <input
+                                type="time"
+                                step="60"
+                                name="break_end[]"
+                                class="input-field-time"
+                                value="{{ old("break_end.$nextIndex") }}">
 
-                            </div>
+                        </div>
 
-                            <div class="error-wrapper">
-                                @error("break_start.$nextIndex")
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                                @error("break_end.$nextIndex")
-                                    <span class="error-message">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </td>
-                    </tr>
+                        {{-- エラー表示（最適化済み） --}}
+                        <div class="error-wrapper">
+                            @if ($errors->has("break_start.$nextIndex"))
+                            <span class="error-message">{{ $errors->first("break_start.$nextIndex") }}</span>
+                            @elseif ($errors->has("break_end.$nextIndex"))
+                            <span class="error-message">{{ $errors->first("break_end.$nextIndex") }}</span>
+                            @endif
+                        </div>
+
+                    </td>
+                </tr>
                 @endif
 
                 {{-- 備考 --}}
@@ -180,14 +180,14 @@
                             rows="3"
                             class="input-field-textarea"
                             @if ($isPending) disabled @endif>{{ old('note',
-                                $correction_request
-                                    ? $correction_request->note
+                                $correctionRequest
+                                    ? $correctionRequest->note
                                     : ($attendance ? $attendance->note : '')
                             ) }}</textarea>
 
                         <div class="error-wrapper">
                             @error('note')
-                                <span class="error-message">{{ $message }}</span>
+                            <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
                     </td>
@@ -199,9 +199,9 @@
         {{-- フッター --}}
         <div class="attendance-footer">
             @if ($isPending)
-                <p class="pending-message">※承認待ちのため修正はできません。</p>
+            <p class="pending-message">※承認待ちのため修正はできません。</p>
             @else
-                <button type="submit" class="fix-button">修正</button>
+            <button type="submit" class="fix-button">修正</button>
             @endif
         </div>
 
