@@ -23,8 +23,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
     public function boot()
     {
-        //
+        if (request()->is('admin/*')) {
+            config(['session.cookie' => config('session.cookie_admin')]);
+        } else {
+            config(['session.cookie' => config('session.cookie')]);
+        }
     }
 }

@@ -151,7 +151,11 @@ class AdminAttendanceController extends Controller
             ->update(['status' => StampCorrectionRequest::STATUS_APPROVED]);
 
         return redirect()
-            ->route('admin.attendance.detail', ['id' => $attendance->id])
+            ->route('admin.attendance.detail', [
+                'id' => $attendance->id,
+                'user_id' => $attendance->user_id,
+                'date' => $attendance->date,
+            ])
             ->with('success', '勤怠を新規登録しました');
     }
 
@@ -171,7 +175,11 @@ class AdminAttendanceController extends Controller
             ->update(['status' => StampCorrectionRequest::STATUS_APPROVED]);
 
         return redirect()
-            ->route('admin.attendance.detail', ['id' => $attendance->id])
+            ->route('admin.attendance.detail', [
+                'id' => $attendance->id,
+                'user_id' => $attendance->user_id,   
+                'date' => $attendance->date,         
+            ])
             ->with('success', '勤怠を修正しました');
     }
 
