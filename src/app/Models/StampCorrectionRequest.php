@@ -25,6 +25,12 @@ class StampCorrectionRequest extends Model
         'admin_comment',
     ];
 
+    protected $casts = [
+        'requested_clock_in' => 'datetime',
+        'requested_clock_out' => 'datetime',
+        'date' => 'date',
+    ];
+
     public function getStatusLabel()
     {
         return match ($this->status) {

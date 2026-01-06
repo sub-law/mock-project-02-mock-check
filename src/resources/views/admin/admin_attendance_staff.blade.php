@@ -106,10 +106,11 @@
                 <td class="detail-cell">
                     <a href="{{ route('admin.attendance.detail', [
                             'id' => $attendance ? $attendance->id : 'new',
+                            'user_id' => $user->id, 
                             'date' => $day->format('Y-m-d')
-                        ]) }}" class="detail-link">
-                        詳細
+                        ]) }}" class="detail-link">詳細
                     </a>
+
                 </td>
 
             </tr>

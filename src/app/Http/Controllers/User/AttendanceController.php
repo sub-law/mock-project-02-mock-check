@@ -117,10 +117,13 @@ class AttendanceController extends Controller
     {
         $userId = Auth::id();
 
+        // ================================
         // ★ 新規申告（attendance が存在しないケース）
+        // ================================
         if ($id === 'new') {
             $date = Carbon::parse($request->date);
 
+            // 修正申請（attendance_id が null の最新）
             $cr = StampCorrectionRequest::with('breaks')
                 ->where('user_id', $userId)
                 ->whereNull('attendance_id')
@@ -128,14 +131,16 @@ class AttendanceController extends Controller
                 ->latest()
                 ->first();
 
-            // 修正申請の休憩 or 空コレクション
+            // 休憩（修正申請優先）
             $breaks = $cr ? $cr->breaks : collect();
-
-            // ★ 空の休憩行を除外
             $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
 
-            // ★ 共通ロジック
+            // 修正申請メタ
             [$requestedIn, $requestedOut, $isPending] = $this->extractCorrectionMeta($cr);
+
+            // ★ 出勤・退勤（修正申請優先）
+            $clockIn = $requestedIn ?? null;
+            $clockOut = $requestedOut ?? null;
 
             return view('user.attendance_detail', [
                 'attendance' => null,
@@ -143,17 +148,19 @@ class AttendanceController extends Controller
                 'breaks' => $breaks,
                 'date' => $date,
                 'user' => Auth::user(),
-                'requestedIn' => $requestedIn,
-                'requestedOut' => $requestedOut,
+                'clockIn' => $clockIn,
+                'clockOut' => $clockOut,
                 'isPending' => $isPending,
             ]);
         }
 
+        // ================================
         // ★ 既存勤怠（attendance が存在するケース）
+        // ================================
         $attendance = Attendance::with([
             'breaks',
             'user',
-            'correctionRequest' => fn($q) => $q->latest(),
+            'correctionRequest' => fn($q) => $q->latest()->limit(1),
             'correctionRequest.breaks'
         ])
             ->where('user_id', $userId)
@@ -161,16 +168,19 @@ class AttendanceController extends Controller
 
         $cr = $attendance->correctionRequest;
 
-        // 修正申請の休憩があれば優先、なければ勤怠の休憩
+        // 休憩（修正申請優先）
         $breaks = ($cr && $cr->breaks->count() > 0)
             ? $cr->breaks
             : $attendance->breaks;
 
-        // ★ 空の休憩行を除外
         $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
 
-        // ★ 共通ロジック
+        // 修正申請メタ
         [$requestedIn, $requestedOut, $isPending] = $this->extractCorrectionMeta($cr);
+
+        // ★ 出勤・退勤（修正申請優先）
+        $clockIn = $requestedIn ?? $attendance->clock_in;
+        $clockOut = $requestedOut ?? $attendance->clock_out;
 
         return view('user.attendance_detail', [
             'attendance' => $attendance,
@@ -178,8 +188,8 @@ class AttendanceController extends Controller
             'breaks' => $breaks,
             'date' => $attendance->date,
             'user' => $attendance->user,
-            'requestedIn' => $requestedIn,
-            'requestedOut' => $requestedOut,
+            'clockIn' => $clockIn,
+            'clockOut' => $clockOut,
             'isPending' => $isPending,
         ]);
     }

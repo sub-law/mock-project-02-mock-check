@@ -54,14 +54,10 @@
                             {{-- 出勤 --}}
                             <input
                                 type="time"
-                                step="60"
                                 name="clock_in"
                                 class="input-field-time"
-                                value="{{ old('clock_in',
-                                    $requestedIn
-                                        ? \Carbon\Carbon::parse($requestedIn)->format('H:i')
-                                        : ($attendance ? optional($attendance->clock_in)->format('H:i') : '')
-                                ) }}"
+                                value="{{ old('clock_in', optional($clockIn)->format('H:i')) }}"
+
                                 @if ($isPending) disabled @endif>
 
                             <span class="time-separator">～</span>
@@ -69,14 +65,10 @@
                             {{-- 退勤 --}}
                             <input
                                 type="time"
-                                step="60"
                                 name="clock_out"
                                 class="input-field-time"
-                                value="{{ old('clock_out',
-                                    $requestedOut
-                                        ? \Carbon\Carbon::parse($requestedOut)->format('H:i')
-                                        : ($attendance ? optional($attendance->clock_out)->format('H:i') : '')
-                                ) }}"
+                                value="{{ old('clock_out', optional($clockOut)->format('H:i')) }}"
+
                                 @if ($isPending) disabled @endif>
 
                         </div>
@@ -101,7 +93,6 @@
 
                             <input
                                 type="time"
-                                step="60"
                                 name="break_start[]"
                                 class="input-field-time"
                                 value="{{ old("break_start.$index", optional($break->break_start)->format('H:i')) }}"
@@ -111,7 +102,6 @@
 
                             <input
                                 type="time"
-                                step="60"
                                 name="break_end[]"
                                 class="input-field-time"
                                 value="{{ old("break_end.$index", optional($break->break_end)->format('H:i')) }}"
@@ -142,7 +132,6 @@
 
                             <input
                                 type="time"
-                                step="60"
                                 name="break_start[]"
                                 class="input-field-time"
                                 value="{{ old("break_start.$nextIndex") }}">
@@ -151,7 +140,6 @@
 
                             <input
                                 type="time"
-                                step="60"
                                 name="break_end[]"
                                 class="input-field-time"
                                 value="{{ old("break_end.$nextIndex") }}">

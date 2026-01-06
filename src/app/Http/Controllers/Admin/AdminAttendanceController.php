@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\User;
@@ -38,53 +39,51 @@ class AdminAttendanceController extends Controller
 
     public function detail($id, Request $request)
     {
-        // 日付
         $date = $request->query('date')
             ? Carbon::parse($request->query('date'))
             : Carbon::today();
 
-        // 勤怠データ取得
-        $attendance = Attendance::with(['user', 'breaks', 'correctionRequest'])->find($id);
+        // ★ 一般ユーザーIDを取得（必須）
+        $userId = $request->query('user_id');
+        $user = User::find($userId);
 
-        // 勤怠が存在しない場合（新規）
+        $attendance = Attendance::with([
+            'user',
+            'breaks',
+            'correctionRequest' => fn($q) => $q->latest()->limit(1),
+            'correctionRequest.breaks'
+        ])->find($id);
+
         if (!$attendance) {
             $attendance = new Attendance(['date' => $date]);
-            $attendance->setRelation('user', null);
+            $attendance->setRelation('user', $user); // ★ ここで user をセット
             $attendance->setRelation('breaks', collect());
             $attendance->setRelation('correctionRequest', null);
         }
 
-        // 修正申請
         $correctionRequest = $attendance->correctionRequest;
 
-        // 承認待ちかどうか
         $isPending = $correctionRequest && $correctionRequest->status === StampCorrectionRequest::STATUS_PENDING;
 
-        // 出勤・退勤（修正申請優先）
-        $clockIn = $correctionRequest && $correctionRequest->requested_clock_in
-            ? $correctionRequest->requested_clock_in
-            : $attendance->clock_in;
+        $clockIn = $correctionRequest?->requested_clock_in ?? $attendance->clock_in;
+        $clockOut = $correctionRequest?->requested_clock_out ?? $attendance->clock_out;
 
-        $clockOut = $correctionRequest && $correctionRequest->requested_clock_out
-            ? $correctionRequest->requested_clock_out
-            : $attendance->clock_out;
-
-        // 休憩（修正申請優先）
         $breaks = ($correctionRequest && $correctionRequest->breaks->count() > 0)
             ? $correctionRequest->breaks
             : $attendance->breaks;
 
-        // 空行を1つ追加
         $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
         $breaks->push(new BreakTime(['break_start' => null, 'break_end' => null]));
 
         return view('admin.attendance_detail', [
-            'attendance' => $attendance,
+            'attendance'        => $attendance,
             'correctionRequest' => $correctionRequest,
-            'clockIn' => $clockIn,
-            'clockOut' => $clockOut,
-            'breaks' => $breaks,
-            'isPending' => $isPending,
+            'clockIn'           => $clockIn,
+            'clockOut'          => $clockOut,
+            'breaks'            => $breaks,
+            'isPending'         => $isPending,
+            'user'              => $user, 
+            'date'              => $date,
         ]);
     }
 
@@ -129,5 +128,71 @@ class AdminAttendanceController extends Controller
             'currentMonth',
             'user'
         ));
+    }
+
+    public function store(AttendanceRequest $request)
+    {
+        // ① 勤怠の新規作成
+        $attendance = Attendance::create([
+            'user_id'   => $request->user_id,
+            'date'      => $request->date,
+            'clock_in'  => $request->clock_in,
+            'clock_out' => $request->clock_out,
+            'note'      => $request->note,
+            'status'    => $request->clock_out ? Attendance::STATUS_DONE : Attendance::STATUS_WORKING,
+        ]);
+
+        // ② 休憩の保存 
+        $this->saveBreakTimes($attendance, $request);
+
+        // ③ 修正申請があれば反映済みにする（任意）
+        StampCorrectionRequest::where('attendance_id', $attendance->id)
+            ->where('status', StampCorrectionRequest::STATUS_PENDING)
+            ->update(['status' => StampCorrectionRequest::STATUS_APPROVED]);
+
+        return redirect()
+            ->route('admin.attendance.detail', ['id' => $attendance->id])
+            ->with('success', '勤怠を新規登録しました');
+    }
+
+    public function update(AttendanceRequest $request, $id)
+    { // ① 既存勤怠を取得 
+        $attendance = Attendance::findOrFail($id);
+
+        // ② 勤怠の更新 
+        $attendance->update(['clock_in' => $request->clock_in, 'clock_out' => $request->clock_out, 'note' => $request->note, 'status' => $request->clock_out ? Attendance::STATUS_DONE : Attendance::STATUS_WORKING,]);
+
+        // ③ 休憩の更新（全削除 → 再作成） 
+        $this->saveBreakTimes($attendance, $request);
+
+        // ④ 修正申請があれば反映済みにする 
+        StampCorrectionRequest::where('attendance_id', $attendance->id)
+            ->where('status', StampCorrectionRequest::STATUS_PENDING)
+            ->update(['status' => StampCorrectionRequest::STATUS_APPROVED]);
+
+        return redirect()
+            ->route('admin.attendance.detail', ['id' => $attendance->id])
+            ->with('success', '勤怠を修正しました');
+    }
+
+    private function saveBreakTimes(Attendance $attendance, AttendanceRequest $request)
+    {
+        // 既存休憩を削除
+        $attendance->breaks()->delete();
+
+        $starts = $request->break_start ?? [];
+        $ends   = $request->break_end ?? [];
+
+        foreach ($starts as $i => $start) {
+            $end = $ends[$i] ?? null;
+
+            // 両方ある場合のみ保存
+            if ($start && $end) {
+                $attendance->breaks()->create([
+                    'break_start' => $start,
+                    'break_end'   => $end,
+                ]);
+            }
+        }
     }
 }

@@ -84,6 +84,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     Route::get('/attendance/{id}', [AdminAttendanceController::class, 'detail'])
         ->name('attendance.detail');
+  
+    Route::put('/attendance/{id}', [AdminAttendanceController::class, 'update'] )
+        ->name('attendance.update');
+
+    Route::post('/attendance', [AdminAttendanceController::class, 'store'])
+        ->name('attendance.store');
 
     Route::get('/staff/list', [AdminStaffController::class, 'index'])
         ->name('staff.list');
@@ -95,7 +101,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         '/stamp_correction_request_list',
         [AdminStampCorrectionRequestListController::class, 'index']
     )->name('stamp.correction.request.list');
-
 
 });
 
