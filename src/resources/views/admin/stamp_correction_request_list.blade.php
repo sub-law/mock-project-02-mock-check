@@ -31,41 +31,35 @@
             </tr>
         </thead>
         <tbody id="pending-data">
+            @foreach ($pending as $req)
             <tr>
                 <td>承認待ち</td>
-                <td>西伶奈</td>
-                <td>2025/12/01</td>
-                <td>管理者側画面</td>
-                <td>2025/12/02</td>
-                <td class="request-detail-cell">詳細</td>
+                <td>{{ $req->user->name }}</td>
+                <td>{{ $req->date->format('Y/m/d') }}</td>
+                <td>{{ $req->note }}</td>
+                <td>{{ $req->created_at->format('Y/m/d') }}</td>
+                <td class="request-detail-cell">
+                    <a href="{{ route('admin.correction.detail', $req->id) }}">詳細</a>
+                </td>
             </tr>
-            <tr>
-                <td>承認待ち</td>
-                <td>西伶奈</td>
-                <td>2025/12/03</td>
-                <td>管理者側画面</td>
-                <td>2025/12/04</td>
-                <td class="request-detail-cell">詳細</td>
-            </tr>
+            @endforeach
+
         </tbody>
 
         <tbody id="approved-data" style="display:none;">
+            @foreach ($approved as $req)
             <tr>
                 <td>承認済み</td>
-                <td>西伶奈</td>
-                <td>2025/12/09</td>
-                <td>遅延のため</td>
-                <td>2025/12/10</td>
-                <td class="request-detail-cell">詳細</td>
+                <td>{{ $req->user->name }}</td>
+                <td>{{ $req->date->format('Y/m/d') }}</td>
+                <td>{{ $req->note }}</td>
+                <td>{{ $req->created_at->format('Y/m/d') }}</td>
+                <td class="request-detail-cell">
+                    <a href="{{ route('admin.correction.detail', $req->id) }}">詳細</a>
+                </td>
             </tr>
-            <tr>
-                <td>承認済み</td>
-                <td>西伶奈</td>
-                <td>2025/12/10</td>
-                <td>体調不良</td>
-                <td>2025/12/11</td>
-                <td class="request-detail-cell">詳細</td>
-            </tr>
+            @endforeach
+
         </tbody>
     </table>
 

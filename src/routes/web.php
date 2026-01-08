@@ -97,15 +97,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'staffAttendance'])
         ->name('staff.attendance');
 
-    Route::get(
-        '/stamp_correction_request_list',
-        [AdminStampCorrectionRequestListController::class, 'index']
-    )->name('stamp.correction.request.list');
+    Route::get('/stamp_correction_request_list', [AdminStampCorrectionRequestListController::class, 'index'])->name('stamp.correction.request.list');
 
+    Route::get('/stamp_correction_request/{id}', [AdminStampCorrectionRequestListController::class, 'detail'])->name('correction.detail');
+    
+    Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestListController::class, 'approve'])->name('stamp.correction.request.approve');
 });
-
-
-    // 承認処理は後で実装
-    // Route::get('/stamp_correction_request/approve/{id}', ...)
-//});
-
