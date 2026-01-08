@@ -237,3 +237,13 @@ body {
     padding-left: 0;
     pointer-events: none;
 }
+
+.fix-button.approved {
+    background-color: #696969 !important;
+    color: #ffffff;
+    cursor: default;
+}
+
+.fix-button.approved:hover {
+    background-color: #696969 !important;
+}
