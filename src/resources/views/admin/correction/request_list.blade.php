@@ -31,7 +31,7 @@
             </tr>
         </thead>
         <tbody id="pending-data">
-            @foreach ($pending as $req)
+            @forelse ($pending as $req)
             <tr>
                 <td>承認待ち</td>
                 <td>{{ $req->user->name }}</td>
@@ -42,12 +42,16 @@
                     <a href="{{ route('admin.correction.detail', $req->id) }}">詳細</a>
                 </td>
             </tr>
-            @endforeach
-
+            @empty
+            <tr>
+                <td colspan="6" class="no-data">承認待ちの申請はありません</td>
+            </tr>
+            @endforelse
         </tbody>
 
+
         <tbody id="approved-data" style="display:none;">
-            @foreach ($approved as $req)
+            @forelse ($approved as $req)
             <tr>
                 <td>承認済み</td>
                 <td>{{ $req->user->name }}</td>
@@ -58,9 +62,13 @@
                     <a href="{{ route('admin.correction.detail', $req->id) }}">詳細</a>
                 </td>
             </tr>
-            @endforeach
-
+            @empty
+            <tr>
+                <td colspan="6" class="no-data">承認済みの申請はありません</td>
+            </tr>
+            @endforelse
         </tbody>
+
     </table>
 
     <script>

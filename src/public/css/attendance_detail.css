@@ -136,6 +136,13 @@ body {
     padding-left: 80px;
 }
 
+textarea[name="note"] {
+    line-height: 1.6;
+    padding: 8px 12px;
+    font-size: 14px;
+    resize: vertical;
+}
+
 .input-field-textarea {
     width: 316px;
     height: 72px;

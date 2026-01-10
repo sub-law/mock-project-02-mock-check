@@ -14,7 +14,6 @@ use App\Http\Controllers\User\AttendanceListController;
 use App\Http\Controllers\User\EmailVerificationNotificationController;
 use App\Http\Controllers\User\AttendanceController;
 use App\Http\Controllers\User\StampCorrectionRequestController;
-use App\Http\Controllers\User\UserStampCorrectionRequestListController;
 
 /*
 |--------------------------------------------------------------------------

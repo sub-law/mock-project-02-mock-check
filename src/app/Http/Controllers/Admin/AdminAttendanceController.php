@@ -39,44 +39,27 @@ class AdminAttendanceController extends Controller
 
     public function detail($id, Request $request)
     {
-        $date = $request->query('date')
-            ? Carbon::parse($request->query('date'))
-            : Carbon::today();
+        // ① 勤怠を取得（存在しない場合は 404）
+        $attendance = Attendance::with(['user', 'breaks'])
+            ->findOrFail($id);
 
-        $userId = $request->query('user_id');
-        $user = User::findOrFail($userId);
+        $user = $attendance->user;
+        $date = $attendance->date;
 
-        // ★ 勤怠を取得（存在しない場合は null）
-        $attendance = Attendance::where('user_id', $userId)
-            ->where('date', $date)
-            ->first();
-
-        // ★ 修正申請（承認待ち）を取得
-        $correctionRequest = StampCorrectionRequest::where('user_id', $userId)
-            ->where('date', $date)
+        // ② 修正申請（承認待ち）を取得
+        $correctionRequest = StampCorrectionRequest::where('attendance_id', $attendance->id)
             ->where('status', StampCorrectionRequest::STATUS_PENDING)
             ->latest()
             ->first();
-
-        // ★ 勤怠が存在しない場合は new モデルを返す（DBに保存しない）
-        if (!$attendance) {
-            $attendance = new Attendance([
-                'user_id' => $userId,
-                'date'    => $date,
-            ]);
-        }
-
-        // ★ 関連ロード（breaks は new の場合は空）
-        $attendance->loadMissing(['user', 'breaks']);
 
         if ($correctionRequest) {
             $correctionRequest->load('breaks');
         }
 
-        // ★ 承認待ちフラグ
+        // ③ 承認待ちフラグ
         $isPending = (bool)$correctionRequest;
 
-        // ★ 表示用の値
+        // ④ 表示用の値
         $clockIn  = $correctionRequest?->requested_clock_in  ?? $attendance->clock_in;
         $clockOut = $correctionRequest?->requested_clock_out ?? $attendance->clock_out;
 
@@ -98,6 +81,7 @@ class AdminAttendanceController extends Controller
             'isPending'
         ));
     }
+
 
     public function staffAttendance(Request $request, $userId)
     {

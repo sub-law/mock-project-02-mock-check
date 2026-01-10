@@ -159,6 +159,13 @@ body {
     margin-left: -20px;
 }
 
+textarea[name="note"] {
+    line-height: 1.6;
+    padding: 8px 12px;
+    font-size: 14px;
+    resize: vertical;
+}
+
 .input-field-break-time {
     width: 103px;
     height: 28px;

@@ -77,7 +77,6 @@
 .attendance-buttons-row {
     display: flex;
     gap: 100px;
-    /* ボタンの間隔 */
     justify-content: center;
     margin-top: 20px;
 }

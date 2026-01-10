@@ -1,7 +1,7 @@
 # 模擬案件2
 coachtech 勤怠管理アプリ
 
-## 環境構築手順
+# 環境構築手順
 クローンの作成
 git clone <リンク名>
 
@@ -12,17 +12,24 @@ touch .env
 UID=1000
 GID=1000
 
-## Laravel初期設定
-make build
-make init
+# コンテナ操作
+PHPコンテナに入る 
 
-## コンテナの起動コマンド
-docker-compose up -d --build
+docker-compose exec php bash
 
-## PHPコンテナ内への移動方法
-docker compose exec php bash
+# Composer インストール
+composer install
 
-## 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
+# Laravel初期設定
+.env 作成 cp .env.example .env
+
+アプリキー生成 php artisan key:generate
+
+マイグレーション php artisan migrate
+
+ダミーデータ作成 php artisan db:seed
+
+# 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
 php artisan view:clear
 php artisan route:clear
 php artisan config:clear
@@ -30,20 +37,12 @@ php artisan cache:clear
 
 PHPコンテナから出る　Ctrl+D
 
-## ログインについての重要な注意
-ブラウザは セッションIDを1つしか保持できないため、
-同一ブラウザで複数アカウント（一般ユーザー・管理者）を同時にログイン状態で操作することはできません。
+# ログインについての重要な注意
+管理者側・一般ユーザーでセッションを分けていますが
+複数の一般ユーザーが同一ブラウザでログインした場合、挙動が不安定になります
+その際は別のブラウザ(chrome・edgeなど)でログインしてください
 
-整合性確認を行う場合は以下のいずれかを使用してください：
-別ブラウザ（例：Chrome と Edge）
-
-通常ウィンドウとシークレットウィンドウ
-
-ブラウザの別プロファイル
-
-これは Laravel の仕様ではなく、Web ブラウザのセッション管理による制約です。
-
-### ダミーデータユーザー情報（管理者1名、一般ユーザー6名）
+# ダミーデータユーザー情報（管理者1名、一般ユーザー6名）
 
 ## 1
 name  管理者
@@ -86,7 +85,7 @@ email  norio.n@coachtech.com
 password  password123
 メール認証済み
 
-### MailHogのメール認証手順
+# MailHogのメール認証手順
 1. 新規ユーザー登録を行う
 2. メール認証誘導画面に遷移、「認証はこちらから」のボタンをクリック
 3. 以下のURLから MailHog にアクセスするので、メール内容を確認してください  
@@ -95,41 +94,28 @@ password  password123
 ※MailHog画面内で認証リンクをクリックした際、1回目は反応しない場合があります。
 その際はメール一覧画面に戻り、再度メール本文内の「メールアドレスを確認する」または「Verify Email Address」をクリックしてください。
 
-## 動作確認URL一覧
+# 動作確認URL一覧
 会員登録画面（一般ユーザー）：	http://localhost/register
+
 ログイン画面（一般ユーザー）	http://localhost/login
+
 ログイン画面（管理者）：	http://localhost/admin/login
+
 MySQL画面：	http://localhost:8080
+
 mailhog認証画面：	http://localhost:8025/
 
-仕様環境
+# 仕様環境
 PHP: 8.1.33 (CLI/FPM)
 Laravel Framework: 8.83.8 (LTS)
 MySQL: 8.0.26
 nginx: 1.21.1
 MailHog
 
-## 補足（環境関連）
+# テストケース確認コマンド
+
+
+# 補足（環境関連）
 - MailHogはローカル開発用のSMTPキャプチャツールです。メールは実際には送信されません。
 - UID/GIDはLinux環境で `id` コマンドにより確認可能です。
 - ER図は設計の参考用です。実装と完全一致しない場合があります。
-
-###　仮画面確認用　URL
-
-# 会員登録画面（一般ユーザー）	http://localhost/register
-# ログイン画面（一般ユーザー）	http://localhost/login
-# メール認証誘導画面（一般ユーザー）http://localhost/verify-email
-# 勤怠登録画面（一般ユーザー）	http://localhost/attendance
-# 勤怠一覧画面（一般ユーザー）	http://localhost/attendance/list
-# 勤怠詳細画面（一般ユーザー）	http://localhost/attendance/detail/{id}
-# 申請一覧画面（一般ユーザー）	http://localhost/stamp_correction_request_list
-# ログイン画面（管理者）	http://localhost/admin/login
-# 勤怠一覧画面（管理者）	http://localhost/admin/attendance/list
-# 勤怠詳細画面（管理者）	http://localhost/admin/attendance/{id}
-# スタッフ一覧画面（管理者）	http://localhost/admin/staff/list
-# スタッフ別勤怠一覧画面（管理者）	http://localhost/admin/attendance/staff/{id}
-# 申請一覧画面（管理者）	http://localhost/stamp_correction_request_list
-# 修正申請承認画面（管理者）	http://localhost/stamp_correction_request/approve/{attendance_correct_request_id}
-
-
-ER図![alt text](模擬案件②ER図.png)

@@ -12,7 +12,7 @@ class StampCorrectionRequest extends Model
     // 申請ステータス 
     const STATUS_PENDING = 0; // 申請中 
     const STATUS_APPROVED = 1; // 承認 
-    const STATUS_REJECTED = 2; // 却下
+    const STATUS_REJECTED = 2; // 却下・今回は未使用
 
     protected $fillable = [
         'user_id',
