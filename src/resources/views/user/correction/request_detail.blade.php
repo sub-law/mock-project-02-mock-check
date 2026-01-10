@@ -1,6 +1,6 @@
-@extends('layouts.admin')
+@extends('layouts.user')
 
-@section('title', '修正中承認画面（管理者）')
+@section('title', '申請一覧画面')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/attendance_detail.css') }}">
@@ -10,7 +10,7 @@
 
 <div class="attendance-header">
     <div class="attendance-line"></div>
-    <h1 class="attendance-title">勤怠詳細</h1>
+    <h1 class="attendance-title">勤怠申請</h1>
 </div>
 
 <div class="attendance-detail-wrapper">
@@ -53,7 +53,7 @@
                 </td>
             </tr>
 
-            {{-- 休憩（複数対応） --}}
+            {{-- 休憩 --}}
             @foreach ($breaks as $i => $break)
             <tr>
                 <th>休憩{{ $i + 1 }}</th>
@@ -79,8 +79,7 @@
             <tr>
                 <th>備考</th>
                 <td class="note-cell">
-                    <textarea class="input-field-textarea" rows="3" disabled>{{ $correction->note }}
-                    </textarea>
+                    <textarea class="input-field-textarea" rows="3" disabled>{{ $correction->note }}</textarea>
                 </td>
             </tr>
 
@@ -89,36 +88,11 @@
 
     <div class="attendance-footer">
         @if ($correction->status === \App\Models\StampCorrectionRequest::STATUS_APPROVED)
-        <button class="fix-button approved" disabled>承認済み</button>
+        <p class="fix-button approved">承認済み</p>
         @else
-        <button id="approveButton" class="fix-button">承認</button>
+        <p class="pending-message">※承認待ちのため修正はできません。</p>
         @endif
     </div>
-
-    <script>
-        const approveBtn = document.getElementById('approveButton');
-
-        if (approveBtn) {
-            approveBtn.addEventListener('click', function() {
-
-                fetch("{{ route('admin.correction.detail.approve', $correction->id) }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Accept": "application/json",
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === "approved") {
-                            approveBtn.textContent = "承認済み";
-                            approveBtn.disabled = true;
-                            approveBtn.classList.add("approved");
-                        }
-                    });
-            });
-        }
-    </script>
 
 </div>
 

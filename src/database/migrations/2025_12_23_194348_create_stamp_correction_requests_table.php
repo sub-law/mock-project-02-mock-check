@@ -27,7 +27,7 @@ class CreateStampCorrectionRequestsTable extends Migration
             $table->string('note'); // NOT NULL
             $table->tinyInteger('status')->default(0); // NOT NULL
 
-            $table->string('admin_comment')->nullable(); // NULL 許可
+            $table->string('admin_comment')->nullable(); // NULL 許可、今回は未使用
 
             $table->timestamps(); // created_at, updated_at（どちらも NOT NULL）
 

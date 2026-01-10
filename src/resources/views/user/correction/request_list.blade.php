@@ -14,6 +14,7 @@
         <h1 class="request-title">申請一覧</h1>
     </div>
 
+    {{-- タブ --}}
     <div class="request-tabs">
         <h2 class="request-tab active" data-tab="pending">承認待ち</h2>
         <h2 class="request-tab" data-tab="approved">承認済み</h2>
@@ -30,48 +31,54 @@
                 <th>詳細</th>
             </tr>
         </thead>
+
+        {{-- 承認待ち --}}
         <tbody id="pending-data">
+            @forelse ($pending as $req)
             <tr>
                 <td>承認待ち</td>
-                <td>西伶奈</td>
-                <td>2025/12/01</td>
-                <td>一般ユーザー画面</td>
-                <td>2025/12/02</td>
-                <td class="request-detail-cell">詳細</td>
+                <td>{{ $req->user->name }}</td>
+                <td>{{ $req->date->format('Y/m/d') }}</td>
+                <td>{{ $req->note }}</td>
+                <td>{{ $req->created_at->format('Y/m/d') }}</td>
+                <td class="request-detail-cell">
+                    <a href="{{ route('stamp.correction.request.detail', $req->id) }}">詳細</a>
+                </td>
             </tr>
+            @empty
             <tr>
-                <td>承認待ち</td>
-                <td>西伶奈</td>
-                <td>2025/12/03</td>
-                <td>一般ユーザー画面</td>
-                <td>2025/12/04</td>
-                <td class="request-detail-cell">詳細</td>
+                <td colspan="6" class="no-data">承認待ちの申請はありません</td>
             </tr>
+            @endforelse
         </tbody>
 
+        {{-- 承認済み --}}
         <tbody id="approved-data" style="display:none;">
+            @forelse ($approved as $req)
             <tr>
                 <td>承認済み</td>
-                <td>西伶奈</td>
-                <td>2025/12/09</td>
-                <td>遅延のため</td>
-                <td>2025/12/10</td>
-                <td class="request-detail-cell">詳細</td>
+                <td>{{ $req->user->name }}</td>
+                <td>{{ $req->date->format('Y/m/d') }}</td>
+                <td>{{ $req->note }}</td>
+                <td>{{ $req->created_at->format('Y/m/d') }}</td>
+                <td class="request-detail-cell">
+                    <a href="{{ route('stamp.correction.request.detail', $req->id) }}">詳細</a>
+                </td>
             </tr>
+            @empty
             <tr>
-                <td>承認済み</td>
-                <td>西伶奈</td>
-                <td>2025/12/10</td>
-                <td>体調不良</td>
-                <td>2025/12/11</td>
-                <td class="request-detail-cell">詳細</td>
+                <td colspan="6" class="no-data">承認済みの申請はありません</td>
             </tr>
+            @endforelse
         </tbody>
+
     </table>
 
+    {{-- タブ切り替え --}}
     <script>
         document.querySelectorAll('.request-tab').forEach(tab => {
             tab.addEventListener('click', () => {
+
                 document.querySelectorAll('.request-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
@@ -87,5 +94,4 @@
     </script>
 
 </div>
-
 @endsection

@@ -49,7 +49,7 @@
                         <th>日付</th>
                         <td class="date-cell">
                             <span>{{ $attendance->date->format('Y年') }}</span>
-                            <span>{{ $attendance->date->format('m月d日') }}</span>
+                            <span>{{ $attendance->date->format('n月j日') }}</span>
                         </td>
                     </tr>
 

@@ -61,7 +61,15 @@ Route::middleware('auth:web')->group(function ()
     Route::post('/attendance/{attendanceId}/correction', [StampCorrectionRequestController::class, 'store'])
         ->name('correction.store');
 
-    Route::get('/stamp_correction_request_list', [UserStampCorrectionRequestListController::class, 'index'])->name('stamp.correction.request.list');
+    Route::get(
+        '/stamp_correction_request_list',
+        [StampCorrectionRequestController::class, 'index']
+    )->name('stamp.correction.request.list');
+
+    Route::get(
+        '/stamp_correction_request_list/{id}',
+        [StampCorrectionRequestController::class, 'detail']
+    )->name('stamp.correction.request.detail');
 });
 
 
@@ -105,4 +113,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::get('/stamp_correction_request/{id}', [AdminStampCorrectionRequestListController::class, 'detail'])->name('correction.detail');
 
     Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestListController::class, 'approve'])->name('correction.detail.approve');
+
+    Route::get('/admin/staff/{id}/attendance/csv', [AdminAttendanceController::class, 'exportCsv'])
+        ->name('staff.attendance.csv');
 });

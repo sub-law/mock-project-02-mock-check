@@ -123,24 +123,21 @@ class AttendanceController extends Controller
         if ($id === 'new') {
             $date = Carbon::parse($request->date);
 
-            // 修正申請（attendance_id が null の最新）
+            // 未承認の修正申請のみ取得
             $cr = StampCorrectionRequest::with('breaks')
                 ->where('user_id', $userId)
                 ->whereNull('attendance_id')
+                ->where('status', StampCorrectionRequest::STATUS_PENDING)
                 ->whereDate('date', $date)
                 ->latest()
                 ->first();
 
-            // 休憩（修正申請優先）
+            // 休憩（修正申請があればそちらを優先）
             $breaks = $cr ? $cr->breaks : collect();
             $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
 
             // 修正申請メタ
             [$requestedIn, $requestedOut, $isPending] = $this->extractCorrectionMeta($cr);
-
-            // ★ 出勤・退勤（修正申請優先）
-            $clockIn = $requestedIn ?? null;
-            $clockOut = $requestedOut ?? null;
 
             return view('user.attendance_detail', [
                 'attendance' => null,
@@ -148,8 +145,8 @@ class AttendanceController extends Controller
                 'breaks' => $breaks,
                 'date' => $date,
                 'user' => Auth::user(),
-                'clockIn' => $clockIn,
-                'clockOut' => $clockOut,
+                'clockIn' => $requestedIn,
+                'clockOut' => $requestedOut,
                 'isPending' => $isPending,
             ]);
         }
@@ -160,7 +157,11 @@ class AttendanceController extends Controller
         $attendance = Attendance::with([
             'breaks',
             'user',
-            'correctionRequest' => fn($q) => $q->latest()->limit(1),
+            // 未承認の修正申請のみ取得
+            'correctionRequest' => fn($q) => $q
+                ->where('status', StampCorrectionRequest::STATUS_PENDING)
+                ->latest()
+                ->limit(1),
             'correctionRequest.breaks'
         ])
             ->where('user_id', $userId)
@@ -168,31 +169,41 @@ class AttendanceController extends Controller
 
         $cr = $attendance->correctionRequest;
 
-        // 休憩（修正申請優先）
-        $breaks = ($cr && $cr->breaks->count() > 0)
-            ? $cr->breaks
-            : $attendance->breaks;
+        // ================================
+        // ★ 未承認の修正申請がある場合 → 修正申請を優先
+        // ================================
+        if ($cr) {
+            [$requestedIn, $requestedOut, $isPending] = $this->extractCorrectionMeta($cr);
 
-        $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
+            $breaks = $cr->breaks->filter(fn($b) => $b->break_start && $b->break_end);
 
-        // 修正申請メタ
-        [$requestedIn, $requestedOut, $isPending] = $this->extractCorrectionMeta($cr);
+            return view('user.attendance_detail', [
+                'attendance' => $attendance,
+                'correctionRequest' => $cr,
+                'breaks' => $breaks,
+                'date' => $attendance->date,
+                'user' => $attendance->user,
+                'clockIn' => $requestedIn ?? $attendance->clock_in,
+                'clockOut' => $requestedOut ?? $attendance->clock_out,
+                'isPending' => true, // 修正申請が未承認
+            ]);
+        }
 
-        // ★ 出勤・退勤（修正申請優先）
-        $clockIn = $requestedIn ?? $attendance->clock_in;
-        $clockOut = $requestedOut ?? $attendance->clock_out;
-
+        // ================================
+        // ★ 修正申請が無い or 承認済み → Attendance を表示
+        // ================================
         return view('user.attendance_detail', [
             'attendance' => $attendance,
-            'correctionRequest' => $cr,
-            'breaks' => $breaks,
+            'correctionRequest' => null,
+            'breaks' => $attendance->breaks->filter(fn($b) => $b->break_start && $b->break_end),
             'date' => $attendance->date,
             'user' => $attendance->user,
-            'clockIn' => $clockIn,
-            'clockOut' => $clockOut,
-            'isPending' => $isPending,
+            'clockIn' => $attendance->clock_in,
+            'clockOut' => $attendance->clock_out,
+            'isPending' => false, // 承認済み or 申請なし
         ]);
     }
+
 
     /**
      * 修正申請のメタ情報を抽出（重複排除）

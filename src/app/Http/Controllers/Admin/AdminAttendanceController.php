@@ -43,50 +43,61 @@ class AdminAttendanceController extends Controller
             ? Carbon::parse($request->query('date'))
             : Carbon::today();
 
-        // ★ 一般ユーザーIDを取得（必須）
         $userId = $request->query('user_id');
-        $user = User::find($userId);
+        $user = User::findOrFail($userId);
 
-        $attendance = Attendance::with([
-            'user',
-            'breaks',
-            'correctionRequest' => fn($q) => $q->latest()->limit(1),
-            'correctionRequest.breaks'
-        ])->find($id);
+        // ★ 勤怠を取得（存在しない場合は null）
+        $attendance = Attendance::where('user_id', $userId)
+            ->where('date', $date)
+            ->first();
 
+        // ★ 修正申請（承認待ち）を取得
+        $correctionRequest = StampCorrectionRequest::where('user_id', $userId)
+            ->where('date', $date)
+            ->where('status', StampCorrectionRequest::STATUS_PENDING)
+            ->latest()
+            ->first();
+
+        // ★ 勤怠が存在しない場合は new モデルを返す（DBに保存しない）
         if (!$attendance) {
-            $attendance = new Attendance(['date' => $date]);
-            $attendance->setRelation('user', $user); // ★ ここで user をセット
-            $attendance->setRelation('breaks', collect());
-            $attendance->setRelation('correctionRequest', null);
+            $attendance = new Attendance([
+                'user_id' => $userId,
+                'date'    => $date,
+            ]);
         }
 
-        $correctionRequest = $attendance->correctionRequest;
+        // ★ 関連ロード（breaks は new の場合は空）
+        $attendance->loadMissing(['user', 'breaks']);
 
-        $isPending = $correctionRequest && $correctionRequest->status === StampCorrectionRequest::STATUS_PENDING;
+        if ($correctionRequest) {
+            $correctionRequest->load('breaks');
+        }
 
-        $clockIn = $correctionRequest?->requested_clock_in ?? $attendance->clock_in;
+        // ★ 承認待ちフラグ
+        $isPending = (bool)$correctionRequest;
+
+        // ★ 表示用の値
+        $clockIn  = $correctionRequest?->requested_clock_in  ?? $attendance->clock_in;
         $clockOut = $correctionRequest?->requested_clock_out ?? $attendance->clock_out;
 
-        $breaks = ($correctionRequest && $correctionRequest->breaks->count() > 0)
+        $breaks = $correctionRequest?->breaks->count()
             ? $correctionRequest->breaks
             : $attendance->breaks;
 
         $breaks = $breaks->filter(fn($b) => $b->break_start && $b->break_end);
         $breaks->push(new BreakTime(['break_start' => null, 'break_end' => null]));
 
-        return view('admin.attendance_detail', [
-            'attendance'        => $attendance,
-            'correctionRequest' => $correctionRequest,
-            'clockIn'           => $clockIn,
-            'clockOut'          => $clockOut,
-            'breaks'            => $breaks,
-            'isPending'         => $isPending,
-            'user'              => $user, 
-            'date'              => $date,
-        ]);
+        return view('admin.attendance_detail', compact(
+            'attendance',
+            'correctionRequest',
+            'clockIn',
+            'clockOut',
+            'breaks',
+            'user',
+            'date',
+            'isPending'
+        ));
     }
-
 
     public function staffAttendance(Request $request, $userId)
     {
@@ -202,5 +213,55 @@ class AdminAttendanceController extends Controller
                 ]);
             }
         }
+    }
+
+    public function exportCsv(Request $request, $userId)
+    {
+        $month = $request->query('month');
+        $user = User::findOrFail($userId);
+
+        $start = Carbon::parse($month)->startOfMonth();
+        $end   = Carbon::parse($month)->endOfMonth();
+
+        $attendances = Attendance::with('breaks')
+            ->where('user_id', $userId)
+            ->whereBetween('date', [$start, $end])
+            ->orderBy('date')
+            ->get();
+
+        $fileName = "{$user->name}_{$month}_attendance.csv";
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=Shift_JIS',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        $callback = function () use ($attendances) {
+            $handle = fopen('php://output', 'w');
+
+            // ヘッダー行（Shift_JIS に変換）
+            $header = ['日付', '出勤', '退勤', '休憩合計', '勤務合計'];
+            fputcsv($handle, array_map(fn($v) => mb_convert_encoding($v, 'SJIS-win', 'UTF-8'), $header));
+
+            foreach ($attendances as $a) {
+                $break = $a->getTotalBreakMinutes();
+                $total = $a->getTotalWorkMinutes();
+
+                $row = [
+                    $a->date,
+                    optional($a->clock_in)?->format('H:i'),
+                    optional($a->clock_out)?->format('H:i'),
+                    sprintf('%d:%02d', floor($break / 60), $break % 60),
+                    sprintf('%d:%02d', floor($total / 60), $total % 60),
+                ];
+
+                // 各行も Shift_JIS に変換
+                fputcsv($handle, array_map(fn($v) => mb_convert_encoding($v, 'SJIS-win', 'UTF-8'), $row));
+            }
+
+            fclose($handle);
+        };
+
+        return response()->streamDownload($callback, $fileName, $headers);
     }
 }

@@ -9,12 +9,15 @@
 @section('content')
 <div class="attendance-list-wrapper">
 
+    {{-- Header --}}
     <div class="attendance-header">
         <div class="attendance-line"></div>
         <h1 class="attendance-title">勤怠一覧</h1>
     </div>
 
+    {{-- Navigation --}}
     <div class="attendance-navigation">
+
         {{-- 前月 --}}
         <a href="{{ route('attendance.list', ['month' => $currentMonth->copy()->subMonth()->format('Y-m')]) }}"
             class="nav-button nav-prev">
@@ -22,13 +25,12 @@
             前月
         </a>
 
+        {{-- 月選択 --}}
         <div class="calendar-wrapper" id="calendarTrigger">
             <img src="{{ asset('images/calendar.png') }}" class="calendar-icon">
             <span class="calendar-label">{{ $currentMonth->format('Y/m') }}</span>
 
-            <input type="month"
-                id="monthPicker"
-                class="month-picker-hidden">
+            <input type="month" id="monthPicker" class="month-picker-hidden">
         </div>
 
         {{-- 翌月 --}}
@@ -39,6 +41,7 @@
         </a>
     </div>
 
+    {{-- Attendance Table --}}
     <table class="attendance-table">
         <thead>
             <tr>
@@ -50,6 +53,7 @@
                 <th>詳細</th>
             </tr>
         </thead>
+
         <tbody>
             @foreach ($days as $day)
             @php
@@ -61,14 +65,10 @@
                 <td>{{ $day->locale('ja')->isoFormat('MM/DD(dd)') }}</td>
 
                 {{-- 出勤 --}}
-                <td>
-                    {{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '' }}
-                </td>
+                <td>{{ $attendance?->clock_in?->format('H:i') }}</td>
 
                 {{-- 退勤 --}}
-                <td>
-                    {{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}
-                </td>
+                <td>{{ $attendance?->clock_out?->format('H:i') }}</td>
 
                 {{-- 休憩 --}}
                 <td>
@@ -79,8 +79,6 @@
                     $breakM = $break % 60;
                     @endphp
                     {{ $breakH }}:{{ sprintf('%02d', $breakM) }}
-                    @else
-
                     @endif
                 </td>
 
@@ -93,35 +91,37 @@
                     $totalM = $total % 60;
                     @endphp
                     {{ $totalH }}:{{ sprintf('%02d', $totalM) }}
-                    @else
-
                     @endif
                 </td>
 
+                {{-- 詳細 --}}
                 <td class="detail-cell">
-                    <a href="{{ route('attendance.detail', ['id' => $attendance->id ?? 'new', 'date' => $day->format('Y-m-d')]) }}"
-                        class="detail-link">
+                    <a href="{{ route('attendance.detail', [
+                                'id' => $attendance?->id ?? 'new',
+                                'date' => $day->format('Y-m-d')
+                            ]) }}" class="detail-link">
                         詳細
                     </a>
                 </td>
-
             </tr>
             @endforeach
         </tbody>
-
-        <script>
-            document.getElementById('calendarTrigger').addEventListener('click', function() {
-                document.getElementById('monthPicker').showPicker();
-            });
-
-            document.getElementById('monthPicker').addEventListener('change', function() {
-                const month = this.value;
-                if (month) {
-                    window.location.href = "{{ route('attendance.list') }}?month=" + month;
-                }
-            });
-        </script>
-
     </table>
+
 </div>
+
+{{-- Script should be OUTSIDE the table --}}
+<script>
+    document.getElementById('calendarTrigger').addEventListener('click', function() {
+        document.getElementById('monthPicker').showPicker();
+    });
+
+    document.getElementById('monthPicker').addEventListener('change', function() {
+        const month = this.value;
+        if (month) {
+            window.location.href = "{{ route('attendance.list') }}?month=" + month;
+        }
+    });
+</script>
+
 @endsection

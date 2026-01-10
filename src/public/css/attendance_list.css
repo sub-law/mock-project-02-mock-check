@@ -2,20 +2,22 @@ body {
     background: #F0EFF2;
 }
 
+/* =========================
+   Header
+========================= */
 .attendance-header {
+    position: relative;
     max-width: 900px;
-    margin: 100px auto;
+    margin: 100px auto 40px;
     display: flex;
     align-items: center;
-    margin-bottom: 40px;
-    position: relative;
 }
 
 .attendance-line {
     width: 0;
     height: 40px;
-    border-left: 8px solid #000000;
     margin-right: 16px;
+    border-left: 8px solid #000;
 }
 
 .attendance-title {
@@ -23,81 +25,38 @@ body {
     font-size: 30px;
     font-weight: 700;
     font-style: normal;
-    line-height: 100%;
+    line-height: 1;
     letter-spacing: 0;
     text-align: left;
 }
 
+/* =========================
+   Wrapper
+========================= */
 .attendance-list-wrapper {
     max-width: 900px;
     margin: 100px auto;
     text-align: center;
     border-radius: 10px;
+    padding-bottom: 50px;
 }
 
-
-
+/* =========================
+   Navigation
+========================= */
 .attendance-navigation {
     width: 900px;
     height: 60px;
-    margin: 40px auto 40px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    opacity: 1;
+    margin: 40px auto;
+    padding: 0 20px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-}
 
-.left-icon {
-    width: 20px;
-    height: 15px;
+    background-color: #fff;
+    border-radius: 10px;
     opacity: 1;
-    transform: rotate(0deg);
-    display: inline-block;
-}
-
-.calendar-wrapper {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 8px 12px;
-    z-index: 20;
-    /* ← input を前面に出すための決定打 */
-}
-
-.month-picker-hidden {
-    position: absolute;
-        inset: 0;
-        /* wrapper 全体を覆う */
-        opacity: 0;
-        cursor: pointer;
-        z-index: 30;
-        /* wrapper より前に */
-}
-
-.calendar-icon {
-    width: 25px;
-    height: 25px;
-}
-
-.calendar-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #000;
-    transform: translateY(-3px);
-}
-
-.right-icon {
-    width: 20px;
-    height: 15px;
-    opacity: 1;
-    transform: rotate(180deg);
-    display: inline-block;
 }
 
 .nav-button {
@@ -115,15 +74,64 @@ body {
     color: #737373;
 }
 
+.left-icon,
+.right-icon {
+    width: 20px;
+    height: 15px;
+    opacity: 1;
+}
+
+.right-icon {
+    transform: rotate(180deg);
+}
+
+/* =========================
+   Calendar
+========================= */
+.calendar-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.month-picker-hidden {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 30;
+}
+
+.calendar-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.calendar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+/* =========================
+   Table
+========================= */
 .attendance-table {
     width: 900px;
     border-collapse: collapse;
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    background-color: #ffffff;
+    background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
     opacity: 1;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
 }
 
 .attendance-table th.status-col,
@@ -135,37 +143,28 @@ body {
 
 .attendance-table th,
 .attendance-table td {
-    background-color: #ffffff;
+    padding: 12px;
+    text-align: center;
+
+    background-color: #fff;
     color: #737373;
-    font-family: 'Inter', sans-serif;
+
     font-weight: 700;
     font-style: normal;
     font-size: 16px;
-    line-height: 100%;
+    line-height: 1;
     letter-spacing: 0.15em;
+
     border-top: 1px solid #E1E1E1;
     border-bottom: 1px solid #E1E1E1;
-    border-left: none;
-    border-right: none;
-    padding: 12px;
-    text-align: center;
 }
 
 .attendance-table thead tr {
     border-bottom: 3px solid #E1E1E1;
 }
 
-.attendance-table th {
-    background-color: #ffffff;
-    font-weight: 700;
-}
-
-.attendance-table td.detail-cell {
-    color: #000000;
-}
-
 .detail-cell a {
-    color: #000000;
+    color: #000;
     text-decoration: none;
     font-weight: 700;
 }
@@ -173,4 +172,45 @@ body {
 .detail-cell a:hover {
     color: #737373;
     text-decoration: underline;
+}
+
+/* =========================
+   Footer
+========================= */
+.attendance-footer {
+    position: relative;
+
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 120px;
+    padding: 0 20px;
+
+    display: flex;
+    justify-content: flex-end;
+
+    background: #F0EFF2;
+}
+
+.fix-button {
+    position: absolute;
+    bottom: -100px;
+    right: 0;
+
+    width: 184px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+
+    background-color: #000;
+    color: #fff;
+    opacity: 1;
+
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: 0.15em;
+
+    cursor: pointer;
 }
