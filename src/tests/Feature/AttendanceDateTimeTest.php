@@ -12,7 +12,7 @@ class AttendanceDateTimeTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function 現在の日時情報がUIと同じ形式で出力されている()
+    public function test_現在の日時情報がUIと同じ形式で出力されている()
     {
         /** @var \App\Models\User */
 

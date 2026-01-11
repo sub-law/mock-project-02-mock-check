@@ -12,7 +12,7 @@ class AttendanceBreakTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function 休憩ボタンが正しく機能する()
+    public function test_休憩ボタンが正しく機能する()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -33,7 +33,7 @@ class AttendanceBreakTest extends TestCase
     }
 
     /** @test */
-    public function 休憩は一日に何回でもできる()
+    public function test_休憩は一日に何回でもできる()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -59,7 +59,7 @@ class AttendanceBreakTest extends TestCase
     }
 
     /** @test */
-    public function 休憩戻ボタンが正しく機能する()
+    public function test_休憩戻ボタンが正しく機能する()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -84,7 +84,7 @@ class AttendanceBreakTest extends TestCase
     }
 
     /** @test */
-    public function 休憩戻は一日に何回でもできる()
+    public function test_休憩戻は一日に何回でもできる()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -105,7 +105,7 @@ class AttendanceBreakTest extends TestCase
     }
 
     /** @test */
-    public function 休憩時刻が勤怠一覧画面で確認できる()
+    public function test_休憩時刻が勤怠一覧画面で確認できる()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([

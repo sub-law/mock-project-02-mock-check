@@ -12,7 +12,7 @@ class AttendanceClockInTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function 出勤ボタンが正しく機能する()
+    public function test_出勤ボタンが正しく機能する()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -31,7 +31,7 @@ class AttendanceClockInTest extends TestCase
     }
 
     /** @test */
-    public function 出勤は一日一回のみできる()
+    public function test_出勤は一日一回のみできる()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -51,7 +51,7 @@ class AttendanceClockInTest extends TestCase
     }
 
     /** @test */
-    public function 出勤時刻が勤怠一覧画面で確認できる()
+    public function test_出勤時刻が勤怠一覧画面で確認できる()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([

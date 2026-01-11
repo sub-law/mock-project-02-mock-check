@@ -26,6 +26,8 @@ composer install
 
 アプリキー生成 php artisan key:generate
 
+テストケース用アプリキー生成 php artisan key:generate --show
+
 マイグレーション php artisan migrate
 
 ダミーデータ作成 php artisan db:seed
@@ -139,6 +141,18 @@ php artisan test tests/Feature/AttendanceClockInTest.php
 
 ID7：休憩機能
 php artisan test tests/Feature/AttendanceBreakTest.php
+
+ID8：退勤機能
+php artisan test tests/Feature/ClockOutTest.php
+
+ID9：勤怠一覧情報取得機能（一般ユーザー）
+php artisan test tests/Feature/AttendanceListTest.php
+
+ID10：勤怠詳細情報取得機能（一般ユーザー）
+php artisan test tests/Feature/.php
+
+
+php artisan test tests/Feature/EnvCheckTest.php
 
 
 # 補足（環境関連）

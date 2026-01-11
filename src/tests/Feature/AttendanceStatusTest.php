@@ -10,8 +10,9 @@ use App\Models\Attendance;
 class AttendanceStatusTest extends TestCase
 {
     use RefreshDatabase;
+    
     /** @test */
-    public function 勤務外の場合_勤怠ステータスが正しく表示される()
+    public function test_勤務外の場合_勤怠ステータスが正しく表示される()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -26,7 +27,7 @@ class AttendanceStatusTest extends TestCase
     }
 
     /** @test */
-    public function 出勤中の場合_勤怠ステータスが正しく表示される()
+    public function test_出勤中の場合_勤怠ステータスが正しく表示される()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -43,7 +44,7 @@ class AttendanceStatusTest extends TestCase
     }
 
     /** @test */
-    public function 休憩中の場合_勤怠ステータスが正しく表示される()
+    public function test_休憩中の場合_勤怠ステータスが正しく表示される()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([
@@ -60,7 +61,7 @@ class AttendanceStatusTest extends TestCase
     }
 
     /** @test */
-    public function 退勤済の場合_勤怠ステータスが正しく表示される()
+    public function test_退勤済の場合_勤怠ステータスが正しく表示される()
     {
         /** @var \App\Models\User */
         $user = User::factory()->create([

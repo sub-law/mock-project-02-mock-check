@@ -11,7 +11,7 @@ class RegisterTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function 名前が未入力の場合_バリデーションエラーになる()
+    public function test_名前が未入力の場合_バリデーションエラーになる()
     {
         $response = $this->post('/register', [
             'name' => '', 
@@ -24,7 +24,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function メールアドレスが未入力の場合_バリデーションエラーになる()
+    public function test_メールアドレスが未入力の場合_バリデーションエラーになる()
     {
         $response = $this->post('/register', [
             'name' => 'テスト太郎', 
@@ -38,7 +38,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function パスワードが8文字未満の場合_バリデーションエラーになる()
+    public function test_パスワードが8文字未満の場合_バリデーションエラーになる()
     {
         $response = $this->post('/register', [
             'name' => 'テスト太郎', 
@@ -51,7 +51,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function パスワードが一致しない場合_バリデーションエラーになる()
+    public function test_パスワードが一致しない場合_バリデーションエラーになる()
     {
         $response = $this->post('/register', [
             'name' => 'テスト太郎', 
@@ -64,7 +64,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function パスワードが未入力の場合_バリデーションエラーになる()
+    public function test_パスワードが未入力の場合_バリデーションエラーになる()
     {
         $response = $this->post('/register', [
             'name' => 'テスト太郎', 
@@ -77,7 +77,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function 正しい入力ならユーザーが保存される()
+    public function test_正しい入力ならユーザーが保存される()
     {
         $response = $this->post('/register', [
             'name' => 'テスト太郎', 
