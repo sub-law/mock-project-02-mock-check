@@ -18,6 +18,7 @@ PHPコンテナに入る
 docker-compose exec php bash
 
 # Composer インストール
+
 composer install
 
 # Laravel初期設定
@@ -38,9 +39,11 @@ php artisan cache:clear
 PHPコンテナから出る　Ctrl+D
 
 # ログインについての重要な注意
-管理者側・一般ユーザーでセッションを分けていますが
-複数の一般ユーザーが同一ブラウザでログインした場合、挙動が不安定になります
-その際は別のブラウザ(chrome・edgeなど)でログインしてください
+本アプリケーションでは、管理者（admin）と一般ユーザー（web）でセッションを分離しています。そのため、同一ブラウザ上で管理者と一般ユーザーを同時にログイン・操作しても問題ありません。
+
+ただし、同一ブラウザ内で複数の一般ユーザーが連続して新規登録・ログインを行う場合、セッション情報が上書きされることで 419 エラー（CSRF トークンエラー）が発生する可能性があります。
+
+この問題が発生した場合は、別のブラウザ（Chrome / Edge など）を使用して新規登録・ログインを行ってください。
 
 # ダミーデータユーザー情報（管理者1名、一般ユーザー6名）
 
@@ -67,6 +70,7 @@ name  増田　一世
 email  issei.m@coachtech.com
 password  password123
 メール認証済み
+
 ## 5
 name  山本　敬吉
 email  keikichi.y@coachtech.com
@@ -113,9 +117,34 @@ nginx: 1.21.1
 MailHog
 
 # テストケース確認コマンド
+全テスト：php artisan test tests/Feature
+
+ID1：認証機能（一般ユーザー）
+php artisan test tests/Feature/RegisterTest.php
+
+ID2：ログイン認証機能（一般ユーザー）
+php artisan test tests/Feature/LoginTest.php
+
+ID3：ログイン認証機能（管理者）
+php artisan test tests/Feature/AdminLoginTest.php
+
+ID4：日時取得機能
+php artisan test tests/Feature/AttendanceDateTimeTest.php
+
+ID5：ステータス確認機能
+php artisan test tests/Feature/AttendanceStatusTest.php
+
+ID6：出勤機能
+php artisan test tests/Feature/AttendanceClockInTest.php
+
+ID7：休憩機能
+php artisan test tests/Feature/AttendanceBreakTest.php
 
 
 # 補足（環境関連）
 - MailHogはローカル開発用のSMTPキャプチャツールです。メールは実際には送信されません。
 - UID/GIDはLinux環境で `id` コマンドにより確認可能です。
 - ER図は設計の参考用です。実装と完全一致しない場合があります。
+
+# ER図
+![alt text](模擬案件②ER図.png)
