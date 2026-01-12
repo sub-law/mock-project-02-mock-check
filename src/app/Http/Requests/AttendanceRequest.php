@@ -50,7 +50,7 @@ class AttendanceRequest extends FormRequest
 
             // 出勤 >= 退勤
             if ($clockIn->gte($clockOut)) {
-                $validator->errors()->add('clock_in', '出勤時間もしくは退勤時間が不適切な値です');
+                $validator->errors()->add('clock_in', '出勤時間が不適切な値です');
             }
 
             // 休憩チェック
@@ -74,20 +74,20 @@ class AttendanceRequest extends FormRequest
                 $startTime = $start ? Carbon::createFromFormat('H:i', $start) : null;
                 $endTime   = $end   ? Carbon::createFromFormat('H:i', $end)   : null;
 
+                // 開始 >= 終了 → 休憩として成立しないので後続チェック不要
                 if ($startTime && $endTime) {
 
-                    // 出勤〜退勤の範囲チェック
+                    if ($startTime->gte($endTime)) {
+                        $validator->errors()->add("break_end.$i", '休憩時間もしくは退勤時間が不適切な値です');
+                        continue; 
+                    }
+
                     if ($startTime->lt($clockIn) || $startTime->gt($clockOut)) {
                         $validator->errors()->add("break_start.$i", '休憩時間が不適切な値です');
                     }
 
                     if ($endTime->lt($clockIn) || $endTime->gt($clockOut)) {
-                        $validator->errors()->add("break_end.$i", '休憩時間が不適切な値です');
-                    }
-
-                    // 開始 >= 終了
-                    if ($startTime->gte($endTime)) {
-                        $validator->errors()->add("break_end.$i", '休憩時間が不適切な値です');
+                        $validator->errors()->add("break_end.$i", '休憩時間もしくは退勤時間が不適切な値です');
                     }
                 }
             }

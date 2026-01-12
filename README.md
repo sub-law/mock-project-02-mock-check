@@ -12,6 +12,9 @@ touch .env
 UID=1000
 GID=1000
 
+# Docker ビルド 
+docker-compose up -d --build
+
 # コンテナ操作
 PHPコンテナに入る 
 
@@ -149,8 +152,10 @@ ID9：勤怠一覧情報取得機能（一般ユーザー）
 php artisan test tests/Feature/AttendanceListTest.php
 
 ID10：勤怠詳細情報取得機能（一般ユーザー）
-php artisan test tests/Feature/.php
+php artisan test tests/Feature/UserAttendanceDetailTest.php
 
+ID11：勤怠詳細情報修正機能（一般ユーザー）
+php artisan test tests/Feature/UserAttendanceCorrectionTest.php
 
 php artisan test tests/Feature/EnvCheckTest.php
 

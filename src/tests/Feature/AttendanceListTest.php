@@ -16,11 +16,15 @@ class AttendanceListTest extends TestCase
 public function test_自分が行った勤怠情報が全て表示されている()
     {
         /** @var \App\Models\User */
-        
-        $user = User::factory()->create();
-        $otherUser = User::factory()->create();
 
-        $this->actingAs($user);
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+        $otherUser = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user, 'web');
 
         // 対象月（例：2026年1月）
         $targetMonth = '2026-01';
@@ -93,8 +97,11 @@ public function test_自分が行った勤怠情報が全て表示されてい�
     {
         /** @var \App\Models\User */
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user, 'web');
 
         $response = $this->get('/attendance/list');
 
@@ -108,8 +115,11 @@ public function test_自分が行った勤怠情報が全て表示されてい�
     {
         /** @var \App\Models\User */
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user, 'web');
 
         $lastMonth = Carbon::now()->subMonth()->format('Y-m');
 
@@ -129,8 +139,11 @@ public function test_自分が行った勤怠情報が全て表示されてい�
     {
         /** @var \App\Models\User */
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user, 'web');
 
         $nextMonth = Carbon::now()->addMonth()->format('Y-m');
 
@@ -150,8 +163,11 @@ public function test_自分が行った勤怠情報が全て表示されてい�
     {
         /** @var \App\Models\User */
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user, 'web');
 
         $attendance = Attendance::factory()->create([
             'user_id' => $user->id,

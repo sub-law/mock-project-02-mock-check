@@ -24,7 +24,7 @@ class ClockOutTest extends TestCase
             'status' => 1, // working
         ])->create();
 
-        $this->actingAs($user);
+        $this->actingAs($user, 'web');
 
         $response = $this->get('/attendance');
         $response->assertStatus(200);
@@ -47,7 +47,7 @@ class ClockOutTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->actingAs($user);
+        $this->actingAs($user, 'web');
 
         $this->post('/attendance/clock-in');
         $this->post('/attendance/clock-out');
