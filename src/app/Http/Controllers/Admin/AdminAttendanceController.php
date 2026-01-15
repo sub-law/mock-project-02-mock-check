@@ -83,7 +83,7 @@ class AdminAttendanceController extends Controller
     }
 
 
-    public function staffAttendance(Request $request, $userId)
+    public function staffattendance(Request $request, $userId)
     {
         // 対象ユーザー
         $user = User::findOrFail($userId);

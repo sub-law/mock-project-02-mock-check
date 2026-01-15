@@ -52,7 +52,6 @@ Route::middleware('auth:web')->group(function ()
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
     Route::post('/attendance/break-in', [AttendanceController::class, 'breakIn'])->name('attendance.breakIn');
     Route::post('/attendance/break-out', [AttendanceController::class, 'breakOut'])->name('attendance.breakOut');
-
     Route::get('/attendance/list', [AttendanceListController::class, 'index'])->name('attendance.list');
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
 
@@ -61,7 +60,7 @@ Route::middleware('auth:web')->group(function ()
         ->name('correction.store');
 
     Route::get(
-        '/stamp_correction_request_list',
+        '/stamp_correction_request/list',
         [StampCorrectionRequestController::class, 'index']
     )->name('stamp.correction.request.list');
 
@@ -101,11 +100,11 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::get('/staff/list', [AdminStaffController::class, 'index'])
         ->name('staff.list');
 
-    Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'staffAttendance'])
+    Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'staffattendance'])
         ->name('staff.attendance');
 
     Route::get(
-        '/stamp_correction_request_list',
+        '/stamp_correction_request/list',
         [AdminStampCorrectionRequestListController::class, 'index']
     )->name('correction.list');
 
@@ -113,6 +112,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestListController::class, 'approve'])->name('correction.detail.approve');
 
-    Route::get('/admin/staff/{id}/attendance/csv', [AdminAttendanceController::class, 'exportCsv'])
+    //Route::get('/admin/staff/{id}/attendance/csv', [AdminAttendanceController::class, 'exportCsv'])
+    //    ->name('staff.attendance.csv');
+
+    Route::get('/staff/{id}/attendance/csv', [AdminAttendanceController::class, 'exportCsv'])
         ->name('staff.attendance.csv');
 });
