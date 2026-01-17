@@ -112,9 +112,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestListController::class, 'approve'])->name('correction.detail.approve');
 
-    //Route::get('/admin/staff/{id}/attendance/csv', [AdminAttendanceController::class, 'exportCsv'])
-    //    ->name('staff.attendance.csv');
-
     Route::get('/staff/{id}/attendance/csv', [AdminAttendanceController::class, 'exportCsv'])
         ->name('staff.attendance.csv');
 });

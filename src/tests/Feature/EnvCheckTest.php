@@ -8,8 +8,11 @@ use Tests\TestCase;
 
 class EnvCheckTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_env_testing_is_loaded()
     {
-        $this->assertEquals('sqlite', config('database.default'));
+
+        $this->assertEquals('mysql', config('database.default'));
     }
 }

@@ -17,23 +17,63 @@ docker-compose up -d --build
 
 # コンテナ操作
 PHPコンテナに入る 
-
 docker-compose exec php bash
 
 # Composer インストール
-
 composer install
 
 # Laravel初期設定
-.env 作成 cp .env.example .env
 
-アプリキー生成 php artisan key:generate
+## .env 作成
+cp .env.example .env
 
-テストケース用アプリキー生成 php artisan key:generate --show
+### アプリキー生成
+php artisan key:generate
 
-マイグレーション php artisan migrate
+## .env.testing 作成（テスト環境用）
+cp .env.testing.example .env.testing
 
-ダミーデータ作成 php artisan db:seed
+### テストケース用アプリキー生成（出力されたキーを .env.testing に貼ってください）
+php artisan key:generate --show
+
+## PHPコンテナから出る　
+exit;
+もしくは
+Ctrl+D
+
+# MySQL コンテナで testing_db を作成
+docker exec -it mock-project-02-develop-mysql-1 bash
+
+mysql -u root -p
+
+## パスワードを入力（docker-compose.yml の MYSQL_ROOT_PASSWORD）
+
+CREATE DATABASE testing_db;
+
+### 権限付与
+GRANT ALL PRIVILEGES ON testing_db.* TO 'laravel_user'@'%';
+FLUSH PRIVILEGES;
+
+### MySQコンテナから出る
+exit;
+もしくは
+Ctrl+D
+
+# PHP コンテナでマイグレーション
+
+## PHPコンテナに入る
+docker-compose exec php bash
+
+### テストマイグレーション実行
+php artisan migrate --env=testing
+
+### マイグレーション実行
+マイグレーション 
+php artisan migrate
+
+### ダミーデータ投入
+ダミーデータ作成 
+php artisan db:seed
 
 # 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
 php artisan view:clear
@@ -41,7 +81,8 @@ php artisan route:clear
 php artisan config:clear
 php artisan cache:clear
 
-PHPコンテナから出る　Ctrl+D
+## PHPコンテナから出る　
+Ctrl+D
 
 # ログインについての重要な注意
 本アプリケーションでは、管理者（admin）と一般ユーザー（web）でセッションを分離しています。そのため、同一ブラウザ上で管理者と一般ユーザーを同時にログイン・操作しても問題ありません。
@@ -122,7 +163,17 @@ nginx: 1.21.1
 MailHog
 
 # テストケース確認コマンド
-全テスト：php artisan test tests/Feature
+
+## PHPコンテナに入る
+docker-compose exec php bash
+
+## PHPコンテナから出る　
+exit;
+もしくは
+Ctrl+D
+
+全テスト
+php artisan test tests/Feature
 
 ID1：認証機能（一般ユーザー）
 php artisan test tests/Feature/RegisterTest.php
@@ -146,7 +197,7 @@ ID7：休憩機能
 php artisan test tests/Feature/AttendanceBreakTest.php
 
 ID8：退勤機能
-php artisan test tests/Feature/ClockOutTest.php
+php artisan test tests/Feature/AttendanceClockOutTest.php
 
 ID9：勤怠一覧情報取得機能（一般ユーザー）
 php artisan test tests/Feature/AttendanceListTest.php
@@ -156,6 +207,12 @@ php artisan test tests/Feature/UserAttendanceDetailTest.php
 
 ID11：勤怠詳細情報修正機能（一般ユーザー）
 php artisan test tests/Feature/UserAttendanceCorrectionTest.php
+
+ID12：勤怠一覧情報取得機能（管理者）
+php artisan test tests/Feature/AttendanceAdminListTest.php
+
+ID13：勤怠詳細情報取得・修正機能（管理者）
+php artisan test tests/Feature/AdminAttendanceDetailTest.php
 
 php artisan test tests/Feature/EnvCheckTest.php
 

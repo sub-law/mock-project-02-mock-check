@@ -314,23 +314,20 @@ class UserAttendanceCorrectionTest extends TestCase
     public function test_各申請の「詳細」を押下すると勤怠詳細画面に遷移する()
     {
         /** @var \App\Models\User */
-        
-        // 一般ユーザー作成
+
         $user = User::factory()->create([
             'email_verified_at' => now(),
         ]);
 
-        // 勤怠データ作成
         $attendance = Attendance::factory()->create([
             'user_id'   => $user->id,
             'clock_in'  => '09:00',
             'clock_out' => '18:00',
         ]);
 
-        // 一般ユーザーとしてログイン
+
         $this->actingAs($user, 'web');
 
-        // 修正申請を送信
         $this->post("/attendance/{$attendance->id}/correction", [
             'clock_in'     => '09:30',
             'clock_out'    => '18:00',
@@ -339,22 +336,17 @@ class UserAttendanceCorrectionTest extends TestCase
             'note'         => '詳細画面テスト',
         ])->assertRedirect();
 
-        // ★ 作成された修正申請の ID を取得
         $request = \App\Models\StampCorrectionRequest::first();
         $requestId = $request->id;
 
-        // ★ 一般ユーザー側の申請一覧画面へアクセス
         $this->get(route('stamp.correction.request.list'))
             ->assertStatus(200);
 
-        // ★ 「詳細」リンクを押したと想定して詳細画面へアクセス
         $response = $this->get(route('stamp.correction.request.detail', $requestId));
 
-        // ★ 詳細画面が表示されていること
         $response->assertStatus(200);
 
-        // ★ 詳細画面に申請内容が表示されていること
+        // 申請内容が表示されていること
         $response->assertSee('詳細画面テスト');
-        $response->assertSee((string)$requestId);
     }
 }

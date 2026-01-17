@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
+use App\Http\Requests\AdminAttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\User;
@@ -15,7 +16,6 @@ class AdminAttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        // ① 日付を取得（不正な値なら今日にフォールバック）
         $dateInput = $request->input('date');
 
         if ($dateInput && Carbon::hasFormat($dateInput, 'Y-m-d')) {
@@ -24,13 +24,11 @@ class AdminAttendanceController extends Controller
             $date = Carbon::today();
         }
 
-        // ② 指定日の勤怠データを取得（ユーザー情報・休憩情報もまとめて取得）
         $attendances = Attendance::with(['user', 'breaks'])
             ->where('date', $date->toDateString())
             ->orderBy('user_id')
             ->get();
 
-        // ③ Blade に渡す
         return view('admin.admin_attendance_list', [
             'date' => $date,
             'attendances' => $attendances,
@@ -39,14 +37,12 @@ class AdminAttendanceController extends Controller
 
     public function detail($id, Request $request)
     {
-        // ① 勤怠を取得（存在しない場合は 404）
         $attendance = Attendance::with(['user', 'breaks'])
             ->findOrFail($id);
 
         $user = $attendance->user;
         $date = $attendance->date;
 
-        // ② 修正申請（承認待ち）を取得
         $correctionRequest = StampCorrectionRequest::where('attendance_id', $attendance->id)
             ->where('status', StampCorrectionRequest::STATUS_PENDING)
             ->latest()
@@ -56,10 +52,8 @@ class AdminAttendanceController extends Controller
             $correctionRequest->load('breaks');
         }
 
-        // ③ 承認待ちフラグ
         $isPending = (bool)$correctionRequest;
 
-        // ④ 表示用の値
         $clockIn  = $correctionRequest?->requested_clock_in  ?? $attendance->clock_in;
         $clockOut = $correctionRequest?->requested_clock_out ?? $attendance->clock_out;
 
@@ -82,34 +76,25 @@ class AdminAttendanceController extends Controller
         ));
     }
 
-
     public function staffattendance(Request $request, $userId)
     {
-        // 対象ユーザー
         $user = User::findOrFail($userId);
 
-        // ?month=2025-01 のような形式で受け取る
         $monthParam = $request->query('month');
 
-        // パラメータがあればその月、なければ今月
         $currentMonth = $monthParam
             ? Carbon::parse($monthParam)->startOfMonth()
             : Carbon::now()->startOfMonth();
 
-        // 月初〜月末
         $start = $currentMonth->copy();
         $end   = $currentMonth->copy()->endOfMonth();
 
-        // 勤怠データ取得（キーを Y-m-d に揃える）
         $attendances = Attendance::with('breaks')
             ->where('user_id', $userId)
             ->whereBetween('date', [$start, $end])
             ->get()
-            ->keyBy(function ($item) {
-                return Carbon::parse($item->date)->format('Y-m-d');
-            });
+            ->keyBy(fn($item) => Carbon::parse($item->date)->format('Y-m-d'));
 
-        // 月の日付一覧
         $days = [];
         $day = $start->copy();
         while ($day->lte($end)) {
@@ -127,7 +112,6 @@ class AdminAttendanceController extends Controller
 
     public function store(AttendanceRequest $request)
     {
-        // ① 勤怠の新規作成
         $attendance = Attendance::create([
             'user_id'   => $request->user_id,
             'date'      => $request->date,
@@ -137,10 +121,8 @@ class AdminAttendanceController extends Controller
             'status'    => $request->clock_out ? Attendance::STATUS_DONE : Attendance::STATUS_WORKING,
         ]);
 
-        // ② 休憩の保存 
         $this->saveBreakTimes($attendance, $request);
 
-        // ③ 修正申請があれば反映済みにする（任意）
         StampCorrectionRequest::where('attendance_id', $attendance->id)
             ->where('status', StampCorrectionRequest::STATUS_PENDING)
             ->update(['status' => StampCorrectionRequest::STATUS_APPROVED]);
@@ -154,17 +136,19 @@ class AdminAttendanceController extends Controller
             ->with('success', '勤怠を新規登録しました');
     }
 
-    public function update(AttendanceRequest $request, $id)
-    { // ① 既存勤怠を取得 
+    public function update(AdminAttendanceRequest $request, $id)
+    {
         $attendance = Attendance::findOrFail($id);
 
-        // ② 勤怠の更新 
-        $attendance->update(['clock_in' => $request->clock_in, 'clock_out' => $request->clock_out, 'note' => $request->note, 'status' => $request->clock_out ? Attendance::STATUS_DONE : Attendance::STATUS_WORKING,]);
+        $attendance->update([
+            'clock_in'  => $request->clock_in,
+            'clock_out' => $request->clock_out,
+            'note'      => $request->note,
+            'status'    => $request->clock_out ? Attendance::STATUS_DONE : Attendance::STATUS_WORKING,
+        ]);
 
-        // ③ 休憩の更新（全削除 → 再作成） 
         $this->saveBreakTimes($attendance, $request);
 
-        // ④ 修正申請があれば反映済みにする 
         StampCorrectionRequest::where('attendance_id', $attendance->id)
             ->where('status', StampCorrectionRequest::STATUS_PENDING)
             ->update(['status' => StampCorrectionRequest::STATUS_APPROVED]);
@@ -172,15 +156,14 @@ class AdminAttendanceController extends Controller
         return redirect()
             ->route('admin.attendance.detail', [
                 'id' => $attendance->id,
-                'user_id' => $attendance->user_id,   
-                'date' => $attendance->date,         
+                'user_id' => $attendance->user_id,
+                'date' => $attendance->date,
             ])
             ->with('success', '勤怠を修正しました');
     }
 
-    private function saveBreakTimes(Attendance $attendance, AttendanceRequest $request)
+    private function saveBreakTimes(Attendance $attendance, Request $request)
     {
-        // 既存休憩を削除
         $attendance->breaks()->delete();
 
         $starts = $request->break_start ?? [];
@@ -189,7 +172,6 @@ class AdminAttendanceController extends Controller
         foreach ($starts as $i => $start) {
             $end = $ends[$i] ?? null;
 
-            // 両方ある場合のみ保存
             if ($start && $end) {
                 $attendance->breaks()->create([
                     'break_start' => $start,
@@ -223,7 +205,6 @@ class AdminAttendanceController extends Controller
         $callback = function () use ($attendances) {
             $handle = fopen('php://output', 'w');
 
-            // ヘッダー行（Shift_JIS に変換）
             $header = ['日付', '出勤', '退勤', '休憩合計', '勤務合計'];
             fputcsv($handle, array_map(fn($v) => mb_convert_encoding($v, 'SJIS-win', 'UTF-8'), $header));
 
@@ -239,7 +220,6 @@ class AdminAttendanceController extends Controller
                     sprintf('%d:%02d', floor($total / 60), $total % 60),
                 ];
 
-                // 各行も Shift_JIS に変換
                 fputcsv($handle, array_map(fn($v) => mb_convert_encoding($v, 'SJIS-win', 'UTF-8'), $row));
             }
 

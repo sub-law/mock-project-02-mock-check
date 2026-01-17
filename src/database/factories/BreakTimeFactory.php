@@ -7,14 +7,20 @@ use App\Models\BreakTime;
 
 class BreakTimeFactory extends Factory
 {
-    protected $model = BreakTime::class;
-
     public function definition()
     {
+        $start = $this->faker->time('H:i:s');
+        $end   = $this->faker->time('H:i:s');
+
+        // 開始 < 終了 になるように調整
+        if ($start >= $end) {
+            $end = date('H:i:s', strtotime($start . ' +1 hour'));
+        }
+
         return [
-            'attendance_id' => null, // テスト側で指定する
-            'break_start'   => $this->faker->dateTime(),
-            'break_end'     => $this->faker->dateTime(),
+            'attendance_id' => null,
+            'break_start'   => $start,
+            'break_end'     => $end,
         ];
     }
 }
