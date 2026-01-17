@@ -5,24 +5,24 @@ coachtech 勤怠管理アプリ
 クローンの作成
 git clone <リンク名>
 
-プロジェクト直下に.envを作成
+# Laravel初期設定
+
+## Docker 用 .env（Laravel の .env とは別ファイル）作成
 touch .env
 
-.envに以下を記述（UID/GIDはホストOSのユーザーIDに合わせて設定）
+作成した.envに以下を記述（UID/GIDはホストOSのユーザーIDに合わせて設定）
 UID=1000
 GID=1000
 
-# Docker ビルド 
+## Docker ビルド 
 docker-compose up -d --build
 
-# コンテナ操作
+## コンテナ操作
 PHPコンテナに入る 
 docker-compose exec php bash
 
-# Composer インストール
+## Composer インストール
 composer install
-
-# Laravel初期設定
 
 ## .env 作成
 cp .env.example .env
@@ -42,7 +42,8 @@ exit;
 Ctrl+D
 
 # MySQL コンテナで testing_db を作成
-docker exec -it mock-project-02-develop-mysql-1 bash
+docker ps で MySQL コンテナ名を確認し、以下のコマンドを実行してください
+docker exec -it <mysql-container-name> bash
 
 mysql -u root -p
 
@@ -213,6 +214,9 @@ php artisan test tests/Feature/AttendanceAdminListTest.php
 
 ID13：勤怠詳細情報取得・修正機能（管理者）
 php artisan test tests/Feature/AdminAttendanceDetailTest.php
+
+ID14：ユーザー情報取得機能（管理者）
+php artisan test tests/Feature/AdminStaffTest.php
 
 php artisan test tests/Feature/EnvCheckTest.php
 
