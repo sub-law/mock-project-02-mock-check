@@ -5,7 +5,6 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Attendance;
 use App\Models\User;
-use Carbon\Carbon;
 
 class AttendanceFactory extends Factory
 {

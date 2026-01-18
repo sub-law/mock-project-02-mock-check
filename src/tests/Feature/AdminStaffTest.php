@@ -79,7 +79,7 @@ class AdminStaffTest extends TestCase
         ]);
 
         $currentMonth = Carbon::now()->startOfMonth();
-        $previousMonth = $currentMonth->copy()->subMonth()->format('Y/m');
+        $previousMonth = $currentMonth->copy()->subMonth()->format('Y-m');
 
         Attendance::factory()->create([
             'user_id' => $user->id,
@@ -105,7 +105,7 @@ class AdminStaffTest extends TestCase
         ]);
 
         $currentMonth = Carbon::now()->startOfMonth();
-        $nextMonth = $currentMonth->copy()->addMonth()->format('Y/m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
 
         Attendance::factory()->create([
             'user_id' => $user->id,
@@ -140,7 +140,8 @@ class AdminStaffTest extends TestCase
         $response = $this->get("/admin/attendance/{$attendance->id}");
 
         $response->assertStatus(200);
-        $response->assertSee('2024-01-20');
+        $response->assertSee('2024年');
+        $response->assertSee('1月20日');
         $response->assertSee('08:30');
         $response->assertSee('17:30');
     }

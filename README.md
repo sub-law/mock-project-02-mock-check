@@ -168,12 +168,7 @@ MailHog
 ## PHPコンテナに入る
 docker-compose exec php bash
 
-## PHPコンテナから出る　
-exit;
-もしくは
-Ctrl+D
-
-全テスト
+### 全テスト
 php artisan test tests/Feature
 
 ID1：認証機能（一般ユーザー）
@@ -218,7 +213,16 @@ php artisan test tests/Feature/AdminAttendanceDetailTest.php
 ID14：ユーザー情報取得機能（管理者）
 php artisan test tests/Feature/AdminStaffTest.php
 
-php artisan test tests/Feature/EnvCheckTest.php
+ID15：勤怠情報修正機能（管理者）
+php artisan test tests/Feature/AdminStampCorrectionRequestTest.php
+
+ID15：メール認証機能
+php artisan test tests/Feature/EmailVerificationTest.php
+
+## PHPコンテナから出る　
+exit;
+もしくは
+Ctrl+D
 
 
 # 補足（環境関連）

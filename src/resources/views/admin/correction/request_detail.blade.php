@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', '修正中承認画面（管理者）')
+@section('title', '修正申請承認画面')
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/attendance_detail.css') }}">
