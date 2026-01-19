@@ -30,44 +30,6 @@ cp .env.example .env
 ### アプリキー生成
 php artisan key:generate
 
-## .env.testing 作成（テスト環境用）
-cp .env.testing.example .env.testing
-
-### テストケース用アプリキー生成（出力されたキーを .env.testing に貼ってください）
-php artisan key:generate --show
-
-## PHPコンテナから出る　
-exit;
-もしくは
-Ctrl+D
-
-# MySQL コンテナで testing_db を作成
-docker ps で MySQL コンテナ名を確認し、以下のコマンドを実行してください
-docker exec -it <mysql-container-name> bash
-
-mysql -u root -p
-
-## パスワードを入力（docker-compose.yml の MYSQL_ROOT_PASSWORD）
-
-CREATE DATABASE testing_db;
-
-### 権限付与
-GRANT ALL PRIVILEGES ON testing_db.* TO 'laravel_user'@'%';
-FLUSH PRIVILEGES;
-
-### MySQコンテナから出る
-exit;
-もしくは
-Ctrl+D
-
-# PHP コンテナでマイグレーション
-
-## PHPコンテナに入る
-docker-compose exec php bash
-
-### テストマイグレーション実行
-php artisan migrate --env=testing
-
 ### マイグレーション実行
 マイグレーション 
 php artisan migrate
