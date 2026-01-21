@@ -182,10 +182,7 @@ ID15：メール認証機能
 php artisan test tests/Feature/EmailVerificationTest.php
 
 ## PHPコンテナから出る　
-exit;
-もしくは
 Ctrl+D
-
 
 # 補足（環境関連）
 - MailHogはローカル開発用のSMTPキャプチャツールです。メールは実際には送信されません。

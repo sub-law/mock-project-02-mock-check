@@ -21,11 +21,11 @@ class AdminAttendanceController extends Controller
         if ($dateInput && Carbon::hasFormat($dateInput, 'Y-m-d')) {
             $date = Carbon::createFromFormat('Y-m-d', $dateInput);
         } else {
-            $date = Carbon::today();
+            $date = Carbon::now()->startOfDay();
         }
 
         $attendances = Attendance::with(['user', 'breaks'])
-            ->where('date', $date->toDateString())
+            ->whereDate('date', $date->toDateString())
             ->orderBy('user_id')
             ->get();
 
