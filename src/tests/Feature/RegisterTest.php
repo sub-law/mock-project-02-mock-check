@@ -76,7 +76,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function test_正しい入力ならユーザーが保存される()
+    public function test_フォームに内容が入力されていた場合、データが正常に保存される()
     {
         $response = $this->post('/register', [
             'name' => 'テスト太郎', 

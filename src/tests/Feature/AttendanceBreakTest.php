@@ -80,7 +80,7 @@ class AttendanceBreakTest extends TestCase
         $this->post('/attendance/break-out');
         $response = $this->get('/attendance');
 
-        $response->assertSee('出勤中');
+        $response->assertSee('勤務中');
     }
 
     /** @test */
