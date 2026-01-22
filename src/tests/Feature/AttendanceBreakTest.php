@@ -56,6 +56,16 @@ class AttendanceBreakTest extends TestCase
         $response = $this->get('/attendance');
 
         $response->assertSee('休憩入');
+
+        $this->post('/attendance/break-in');
+        $response = $this->get('/attendance');
+        $response->assertSee('休憩中');
+        $response->assertSee('休憩戻');
+
+        $this->post('/attendance/break-out');
+        $response = $this->get('/attendance');
+
+        $response->assertSee('休憩入');
     }
 
     /** @test */
@@ -80,7 +90,7 @@ class AttendanceBreakTest extends TestCase
         $this->post('/attendance/break-out');
         $response = $this->get('/attendance');
 
-        $response->assertSee('勤務中');
+        $response->assertSee('出勤中');
     }
 
     /** @test */
@@ -96,11 +106,15 @@ class AttendanceBreakTest extends TestCase
         $this->actingAs($user, 'web');
 
         $this->post('/attendance/break-in');
-        $this->post('/attendance/break-out');
-        $this->post('/attendance/break-in');
-
         $response = $this->get('/attendance');
+        $response->assertSee('休憩戻');
 
+        $this->post('/attendance/break-out');
+        $response = $this->get('/attendance');
+        $response->assertSee('休憩入');
+
+        $this->post('/attendance/break-in');
+        $response = $this->get('/attendance');
         $response->assertSee('休憩戻');
     }
 

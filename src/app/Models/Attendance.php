@@ -29,7 +29,7 @@ class Attendance extends Model
     {
         return match ($this->status) {
             self::STATUS_NONE => '勤務外',
-            self::STATUS_WORKING => '勤務中',
+            self::STATUS_WORKING => '出勤中',
             self::STATUS_BREAK => '休憩中',
             self::STATUS_DONE => '退勤済',
             default => '不明',

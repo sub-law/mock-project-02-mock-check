@@ -156,8 +156,6 @@ class AttendanceAdminListTest extends TestCase
         Carbon::setTestNow('2026-01-18');
         $tomorrow = Carbon::parse('2026-01-18');
 
-        $tomorrow = '2026-01-18';
-
         $response = $this->get('/admin/attendance/list?date=' . $tomorrow);
 
         $response->assertSee('2026年01月18日');

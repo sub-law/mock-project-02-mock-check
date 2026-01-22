@@ -40,7 +40,7 @@ class AttendanceStatusTest extends TestCase
 
         $response = $this->withSession([])->get('/attendance');
 
-        $response->assertSee('勤務中');
+        $response->assertSee('出勤中');
     }
 
     /** @test */

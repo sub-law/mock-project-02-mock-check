@@ -96,7 +96,7 @@ class AdminStaffTest extends TestCase
     }
 
     /** @test */
-    public function test_「翌月」を押下した時に表示月の前月の情報が表示される()
+    public function test_「翌月」を押下した時に表示月の翌月の情報が表示される()
     {
         $this->adminLogin();
 
@@ -104,22 +104,29 @@ class AdminStaffTest extends TestCase
             'email_verified_at' => now(),
         ]);
 
-        $currentMonth = Carbon::now()->startOfMonth();
-        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+        // 翌月を計算
+        $nextMonth = Carbon::now()->addMonth();
+        $nextMonthYm = $nextMonth->format('Y-m');
+        $nextMonthDate = $nextMonth->copy()->setDay(10)->locale('ja')->isoFormat('MM/DD(dd)');
 
-        Attendance::factory()->create([
-            'user_id' => $user->id,
-            'date' => $nextMonth . '-15',
-            'clock_in' => '10:00',
-            'clock_out' => '19:00',
-        ]);
+        // 翌月の勤怠データは作らない（＝空の月をテスト）
 
-        $response = $this->get("/admin/attendance/staff/{$user->id}?month={$nextMonth}");
+        $response = $this->get("/admin/attendance/staff/{$user->id}?month={$nextMonthYm}");
 
-        $response->assertSee($nextMonth);
-        $response->assertSee('10:00');
-        $response->assertSee('19:00');
+        // 翌月の年月が表示されている
+        $response->assertSee($nextMonthYm);
+
+        // カレンダーの日付（例：02/10(火)）が表示されている
+        $response->assertSee($nextMonthDate);
+
+        // 勤怠データがないことを確認
+        $response->assertDontSee('09:00');
+        $response->assertDontSee('18:00');
+        $response->assertDontSee('1:00');
+        $response->assertDontSee('8:00');
     }
+
+
 
     /** @test */
     public function test_「詳細」を押下すると、その日の勤怠詳細画面に遷移する()

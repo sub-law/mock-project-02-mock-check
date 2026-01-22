@@ -178,7 +178,7 @@ php artisan test tests/Feature/AdminStaffTest.php
 ID15：勤怠情報修正機能（管理者）
 php artisan test tests/Feature/AdminStampCorrectionRequestTest.php
 
-ID15：メール認証機能
+ID16：メール認証機能
 php artisan test tests/Feature/EmailVerificationTest.php
 
 ## PHPコンテナから出る　

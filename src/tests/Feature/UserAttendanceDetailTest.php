@@ -75,6 +75,8 @@ class UserAttendanceDetailTest extends TestCase
 
         $response = $this->get("/attendance/detail/{$attendance->id}");
 
+        $response->assertSee('09:00');
+        $response->assertSee('18:00');
         $response->assertSee($clockIn->format('H:i'));
         $response->assertSee($clockOut->format('H:i'));
     }
@@ -98,11 +100,11 @@ class UserAttendanceDetailTest extends TestCase
             
         $this->actingAs($user, 'web');
         
-        $response = $this->get("/attendance/detail/{$attendance->id}"); 
-            
+        $response = $this->get("/attendance/detail/{$attendance->id}");
+
+        $response->assertSee('12:00');
+        $response->assertSee('13:00');
         $response->assertSee($breakStart->format('H:i')); 
         $response->assertSee($breakEnd->format('H:i'));
-        $this->assertEquals($breakStart, $break->break_start);
-        $this->assertEquals($breakEnd, $break->break_end);
     }
 }

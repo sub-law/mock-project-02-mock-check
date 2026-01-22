@@ -241,11 +241,6 @@ class UserAttendanceCorrectionTest extends TestCase
             'email_verified_at' => now(),
         ]);
 
-        // 管理者ユーザー作成
-        $admin = Admin::factory()->create([
-            'email_verified_at' => now(),
-        ]);
-
         // 勤怠データ作成
         $attendance = Attendance::factory()->create([
             'user_id'   => $user->id,
@@ -322,7 +317,6 @@ class UserAttendanceCorrectionTest extends TestCase
             'clock_out' => '18:00',
         ]);
 
-
         $this->actingAs($user, 'web');
 
         $this->post("/attendance/{$attendance->id}/correction", [
@@ -344,6 +338,11 @@ class UserAttendanceCorrectionTest extends TestCase
         $response->assertStatus(200);
 
         // 申請内容が表示されていること
+        $response->assertSee('09:30');
+        $response->assertSee('18:00');
+        $response->assertSee('12:00');
+        $response->assertSee('13:00');
         $response->assertSee('詳細画面テスト');
+        $response->assertSee('※承認待ちのため修正はできません。');
     }
 }

@@ -27,7 +27,7 @@ class AttendanceClockInTest extends TestCase
         $response = $this->post('/attendance/clock-in');
 
         $response = $this->get('/attendance');
-        $response->assertSee('勤務中');   
+        $response->assertSee('出勤中');   
     }
 
     /** @test */

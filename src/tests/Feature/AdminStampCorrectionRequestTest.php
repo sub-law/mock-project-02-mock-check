@@ -107,7 +107,6 @@ class AdminStampCorrectionRequestTest extends TestCase
             'break_end' => '2026-01-01 13:00:00',
         ]);
 
-
         $this->adminLogin();
 
         $response = $this->get(route('admin.correction.detail', $correction->id));

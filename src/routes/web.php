@@ -33,7 +33,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // ログイン後（web guard）
 Route::middleware('auth:web')->group(function () 
 {
-
     // メール認証
     Route::get('/email/verify', fn() => view('user.verify'))
         ->name('verification.notice');
