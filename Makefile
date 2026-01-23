@@ -1,23 +1,25 @@
-# Docker ビルド
-build:
-	docker-compose up -d --build
+setup:
+    docker-compose up -d --build
+    docker-compose exec php composer install
+    docker-compose exec php cp .env.example .env
+    docker-compose exec php php artisan key:generate
+    docker-compose exec php php artisan migrate
+    docker-compose exec php php artisan db:seed
 
-# PHPコンテナに入る
-php:
-	docker-compose exec php bash
+bash:
+    docker-compose exec php bash
 
-# Laravel 初期設定
-init:
-	docker-compose exec php bash -c "\
-        composer install && \
-        cp .env.example .env && \
-		php artisan key:generate \
-    "
+migrate:
+    docker-compose exec php php artisan migrate
+
+seed:
+    docker-compose exec php php artisan db:seed
+
+fresh:
+    docker-compose exec php php artisan migrate:fresh --seed
 
 clear:
-	docker-compose exec php bash -c "\
-		php artisan view:clear && \
-        php artisan route:clear && \
-        php artisan config:clear && \
-        php artisan cache:clear \
-    "
+    docker-compose exec php php artisan view:clear
+    docker-compose exec php php artisan route:clear
+    docker-compose exec php php artisan config:clear
+    docker-compose exec php php artisan cache:clear

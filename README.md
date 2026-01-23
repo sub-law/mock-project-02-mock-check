@@ -14,6 +14,9 @@ touch .env
 UID=1000
 GID=1000
 
+# プロジェクト直下で、以下のコマンドを実行する
+make setup
+
 ## Docker ビルド 
 docker-compose up -d --build
 
