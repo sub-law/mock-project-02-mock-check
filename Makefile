@@ -17,7 +17,7 @@ seed:
 	docker-compose exec php php artisan db:seed
 
 fresh:
-	docker-compose exec php php artisan migrate:fresh--seed	
+	docker-compose exec php php artisan migrate:fresh --seed	
 					
 clear:
 	docker-compose exec php php artisan view:clear
