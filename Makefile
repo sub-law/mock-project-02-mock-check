@@ -1,8 +1,8 @@
 setup:
 	docker-compose up -d --build
-	sleep 10
+	sleep 15
 	docker-compose exec php composer install
-	docker-compose exec php cp .env.example .env
+	@if [ ! -f .env ]; then docker-compose exec php cp .env.example .env; fi
 	docker-compose exec php php artisan key:generate
 	docker-compose exec php php artisan migrate --seed
 	docker-compose exec php php artisan storage:link

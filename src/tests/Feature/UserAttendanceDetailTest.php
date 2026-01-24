@@ -82,7 +82,7 @@ class UserAttendanceDetailTest extends TestCase
     }
 
     /** @test */
-    public function test_「「休憩」にて記されている時間がログインユーザーの打刻と一致している()
+    public function test_「休憩」にて記されている時間がログインユーザーの打刻と一致している()
     {
         /** @var \App\Models\User */
 

@@ -14,9 +14,6 @@ touch .env
 UID=1000
 GID=1000
 
-# プロジェクト直下で、以下のコマンドを実行する
-make setup
-
 ## Docker ビルド 
 docker-compose up -d --build
 
@@ -194,3 +191,6 @@ Ctrl+D
 
 # ER図
 ![alt text](模擬案件②ER図.png)
+
+※ Makefile は開発効率向上のための補助ツールです。
+※ 採点時は README の手順に従ってセットアップしてください。
