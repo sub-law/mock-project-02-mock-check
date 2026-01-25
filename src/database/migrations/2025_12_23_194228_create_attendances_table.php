@@ -28,9 +28,6 @@ class CreateAttendancesTable extends Migration
 
             $table->timestamps(); // created_at, updated_at（どちらも NOT NULL）
 
-            // UNIQUE KEY (user_id, date)
-            $table->unique(['user_id', 'date']);
-
             // FOREIGN KEY
             $table->foreign('user_id')
                 ->references('id')

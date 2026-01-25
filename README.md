@@ -4,15 +4,20 @@ coachtech 勤怠管理アプリ
 # 環境構築手順
 クローンの作成
 git clone <リンク名>
+cd <プロジェクト名>
 
 # Laravel初期設定
 
-## Docker 用 .env（Laravel の .env とは別ファイル）作成
+## Docker 用 .env作成(プロジェクト直下)
 touch .env
 
-作成した.envに以下を記述（UID/GIDはホストOSのユーザーIDに合わせて設定）
+### 作成した.envに以下を記述（UID/GIDはホストOSのユーザーIDに合わせて設定）
+Linux 環境の一般ユーザーは多くの場合、以下の値になります
 UID=1000
 GID=1000
+
+#### 他の環境では以下のコマンドでホストユーザーのUID/GIDを確認し、同じ値を記述してください
+id
 
 ## Docker ビルド 
 docker-compose up -d --build
@@ -37,6 +42,7 @@ php artisan migrate
 ### ダミーデータ投入
 ダミーデータ作成 
 php artisan db:seed
+※先月のデータは土日の勤怠実績なし、当月分の勤怠データは前日のまでのものとなります
 
 # 各キャッシュのクリアコマンド(動作が不安定な場合に使用してください)
 php artisan view:clear
@@ -54,45 +60,58 @@ Ctrl+D
 
 この問題が発生した場合は、別のブラウザ（Chrome / Edge など）を使用して新規登録・ログインを行ってください。
 
+# 動作確認URL一覧
+会員登録画面（一般ユーザー）：	http://localhost/register
+
+ログイン画面（一般ユーザー）	http://localhost/login
+
+ログイン画面（管理者）：	http://localhost/admin/login
+
+MySQL画面：	http://localhost:8080
+
+mailhog認証画面：	http://localhost:8025/
+
 # ダミーデータユーザー情報（管理者1名、一般ユーザー6名）
 
-## 1
+## 管理者
 name  管理者
 email  admin@example.com
 password  password123
 メール認証済み
 
-## 2
+## 1
 name  西　伶奈
 email  reina.n@coachtech.com
 password  password123
 メール認証済み
+※このユーザーには前月の勤怠記録に退勤の打刻忘れのデータを付与しています
+勤怠修正の動作確認等に使用してください
 
-## 3
+## 2
 name  山田　太郎
 email  taro.y@coachtech.com
 password  password123
 メール認証済み
 
-## 4
+## 3
 name  増田　一世
 email  issei.m@coachtech.com
 password  password123
 メール認証済み
 
-## 5
+## 4
 name  山本　敬吉
 email  keikichi.y@coachtech.com
 password  password123
 メール認証済み
 
-## 6
+## 5
 name  秋田　朋美
 email  tomomi.a@coachtech.com
 password  password123
 メール認証済み
 
-## 7
+## 6
 name  中西　教夫
 email  norio.n@coachtech.com
 password  password123
@@ -106,17 +125,6 @@ password  password123
 4. 自身が登録したメール本文内の「メールアドレスを確認する」または「Verify Email Address」をクリックすると、認証が完了し、初回はプロフィール設定画面に遷移します
 ※MailHog画面内で認証リンクをクリックした際、1回目は反応しない場合があります。
 その際はメール一覧画面に戻り、再度メール本文内の「メールアドレスを確認する」または「Verify Email Address」をクリックしてください。
-
-# 動作確認URL一覧
-会員登録画面（一般ユーザー）：	http://localhost/register
-
-ログイン画面（一般ユーザー）	http://localhost/login
-
-ログイン画面（管理者）：	http://localhost/admin/login
-
-MySQL画面：	http://localhost:8080
-
-mailhog認証画面：	http://localhost:8025/
 
 # 仕様環境
 PHP: 8.1.33 (CLI/FPM)
