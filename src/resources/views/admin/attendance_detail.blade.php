@@ -28,7 +28,6 @@
         <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
         @endif
 
-
         <div class="attendance-header">
             <div class="attendance-line"></div>
             <h1 class="attendance-title">勤怠詳細</h1>

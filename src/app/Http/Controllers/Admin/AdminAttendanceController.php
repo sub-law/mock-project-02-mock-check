@@ -24,16 +24,22 @@ class AdminAttendanceController extends Controller
             $date = Carbon::now()->startOfDay();
         }
 
-        $attendances = Attendance::with(['user', 'breaks'])
+        // 全ユーザー取得
+        $users = User::orderBy('id')->get();
+
+        // その日の勤怠を user_id をキーにして取得
+        $attendances = Attendance::with(['breaks'])
             ->whereDate('date', $date->toDateString())
-            ->orderBy('user_id')
-            ->get();
+            ->get()
+            ->keyBy('user_id');
 
         return view('admin.admin_attendance_list', [
             'date' => $date,
+            'users' => $users,
             'attendances' => $attendances,
         ]);
     }
+
 
     public function detail($id, Request $request)
     {
@@ -75,6 +81,40 @@ class AdminAttendanceController extends Controller
             'isPending'
         ));
     }
+
+    public function create(Request $request)
+    {
+        $userId = $request->query('user_id');
+        $date   = Carbon::parse($request->query('date'));
+
+        $user = User::findOrFail($userId);
+
+        // ★ ダミーの Attendance（exists = false）
+        $attendance = new Attendance([
+            'user_id' => $userId,
+            'date' => $date,
+            'clock_in' => null,
+            'clock_out' => null,
+            'note' => null,
+        ]);
+
+        // ★ 空の休憩1行だけ
+        $breaks = collect([
+            new BreakTime(['break_start' => null, 'break_end' => null])
+        ]);
+
+        return view('admin.attendance_detail', [
+            'attendance' => $attendance,
+            'correctionRequest' => null,
+            'clockIn' => null,
+            'clockOut' => null,
+            'breaks' => $breaks,
+            'user' => $user,
+            'date' => $date,
+            'isPending' => false,
+        ]);
+    }
+
 
     public function staffattendance(Request $request, $userId)
     {

@@ -87,14 +87,17 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])
         ->name('attendance.list');
 
+    Route::get('/attendance/create', [AdminAttendanceController::class, 'create'])
+        ->name('attendance.create');
+
+    Route::post('/attendance', [AdminAttendanceController::class, 'store'])
+        ->name('attendance.store');
+
     Route::get('/attendance/{id}', [AdminAttendanceController::class, 'detail'])
         ->name('attendance.detail');
   
     Route::put('/attendance/{id}', [AdminAttendanceController::class, 'update'] )
         ->name('attendance.update');
-
-    Route::post('/attendance', [AdminAttendanceController::class, 'store'])
-        ->name('attendance.store');
 
     Route::get('/staff/list', [AdminStaffController::class, 'index'])
         ->name('staff.list');

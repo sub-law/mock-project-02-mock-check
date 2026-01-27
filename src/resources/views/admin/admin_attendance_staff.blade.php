@@ -101,14 +101,24 @@
 
                 {{-- 詳細 --}}
                 <td class="detail-cell">
+                    @if ($attendance)
+                    {{-- 既存勤怠 → detail --}}
                     <a href="{{ route('admin.attendance.detail', [
-                                'id' => $attendance?->id ?? 'new',
-                                'user_id' => $user->id,
-                                'date' => $day->format('Y-m-d')
-                            ]) }}" class="detail-link">
+                            'id' => $attendance->id
+                        ]) }}" class="detail-link">
                         詳細
                     </a>
+                    @else
+                    {{-- 空の日 → create --}}
+                    <a href="{{ route('admin.attendance.create', [
+                            'user_id' => $user->id,
+                            'date' => $day->format('Y-m-d')
+                        ]) }}" class="detail-link">
+                        詳細
+                    </a>
+                    @endif
                 </td>
+
             </tr>
             @endforeach
         </tbody>
