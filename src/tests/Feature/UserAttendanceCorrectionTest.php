@@ -35,7 +35,7 @@ class UserAttendanceCorrectionTest extends TestCase
             'note' => 'テスト用の備考', 
               ]); 
 
-        $response->assertSessionHasErrors([ 'clock_in' => '出勤時間が不適切な値です', ]);
+        $response->assertSessionHasErrors([ 'clock_in' => '出勤時間もしくは退勤時間が不適切な値です', ]);
     }
 
     /** @test */
